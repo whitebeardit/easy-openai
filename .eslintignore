@@ -1,0 +1,6 @@
+/*.js
+node_modules
+lib
+__test__/
+jest.config.ts
+jest.setup.redis-mock.ts
