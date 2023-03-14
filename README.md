@@ -23,7 +23,9 @@ So, you can put this in to a .env and use the lib `dotenv` to load the variables
 
 ```ts
 const chatRepository = new ChatRepository();
-const whitebeardAssistant = new Assistant(chatRepository, {
+const messageRepository = new MessageRepository();
+
+const whitebeardAssistant = new Assistant(chatRepository, messageRepository, {
   name: 'Whitebeard',
   humor: EHumor.SARCASTIC,
   model: EModel['GPT-3.5-TURBO'],
@@ -54,31 +56,17 @@ It returns some like:
 ]
 ```
 
-## Create a new chat into the assistant
+## Create a new chat and add to the assistant
 
 ```ts
-const messageRepository = new MessageRepository();
-const newChat = new Chat(
-  {
-    _id: randomUUID(),
-    ownerId,
-    title: 'DEFAULT',
-  },
-  messageRepository,
-);
-whitebeardAssistant.addChat({ chat: newChat });
-```
-
-## Retrieve all chats
-
-```ts
-const chats = await whitebeardAssistant.getChats(ownerId);
-```
-
-## Get a chat by chatId
-
-```ts
-const chatFound = await whitebeardAssistant.getChat({ chatId: id });
+const ownerId = 'almera_0123';
+const chatId = randomUUID();
+const newChat = new Chat({
+  _id: chatId,
+  ownerId,
+  title: 'DEFAULT',
+});
+const chatCreated = await whitebeardAssistant.addChat({ chat: newChat });
 ```
 
 ## Add a new message into Chat
@@ -86,16 +74,18 @@ const chatFound = await whitebeardAssistant.getChat({ chatId: id });
 ```ts
 const message: IChatCompletionMessage = {
   content: 'How much is 10 + 1 ?',
-  ownerId,
+  ownerId: String(chatCreated?.ownerId),
   role: 'user',
+  chatId: String(chatCreated?.id),
 };
-chatFound.addMessage(message);
+await whitebeardAssistant.addMessage(message);
 ```
 
-## Send all chat messages to the GPT
+## Send the chat (with all messages) to the ChatGPT
 
 ```ts
-const resp = await whitebeardAssistant.sendMessage({ chatId: id });
+const resp = await whitebeardAssistant.sendChat(String(chatCreated?.id));
+console.info(resp);
 ```
 
 ### An example of the answer is:
@@ -115,10 +105,14 @@ const resp = await whitebeardAssistant.sendMessage({ chatId: id });
 
 > If you want send only one message, you should create a chat message with only one message. We send all messages into chat because the assistant needs of the context to answer more precisely,
 
-### Get all messages - Questions ans Answers in a chat
+### Get all messages - Questions ans Answers, by a chatId/ownerId
 
 ```js
-await chatFound.getMessages();
+const chatMessages = await whitebeardAssistant.getMessages({
+  chatId,
+  ownerId,
+});
+console.info({ chatMessages });
 ```
 
 The return will be something like:
@@ -142,7 +136,8 @@ The return will be something like:
     "id": "chatcmpl-6tqaQq5Ezim2DaJeQkX2xfBm5KwAh",
     "created": 1678768202,
     "object": "chat.completion",
-    "ownerId": "almera_8a9cedec-5c1f-46b9-968f-119abb48ac78"
+    "ownerId": "almera_0123",
+    "chatId": "56609fc4-1800-495d-90ee-a887aaf6a493"
   }
 ]
 ```

@@ -1,90 +1,46 @@
-import '../configurations/dotenv';
+import dotenv from 'dotenv';
+dotenv.config({ path: './environments/.env' });
 
 import { randomUUID } from 'crypto';
-import { ChatRepository } from '../infrastructure/chat.repository';
-import { MessageRepository } from '../infrastructure/message.repository';
-import { Logger } from 'traceability';
-import { Assistant, Chat, EHumor, EModel, IChatCompletionMessage } from '../';
+import { Assistant, Chat, IChatCompletionMessage, memoryRepository } from '../';
+const { ChatRepository, MessageRepository } = memoryRepository;
 
-import { loggerConfiguration } from '../configurations/log.conf';
-Logger.configure(loggerConfiguration);
-Logger.level = 'info';
-
-const ownerId = `almera_${randomUUID()}`;
-
-const setup = () => {
+const main = async () => {
   const chatRepository = new ChatRepository();
   const messageRepository = new MessageRepository();
 
-  const whitebeardAssistant = new Assistant(chatRepository, messageRepository, {
-    name: 'Whitebeard',
-    humor: EHumor.SARCASTIC,
-    model: EModel['GPT-3.5-TURBO'],
-    id: randomUUID(),
-  });
+  const whitebeardAssistant = new Assistant(chatRepository, messageRepository);
+  console.info(whitebeardAssistant.context);
 
+  // Create a new Chat and add it on the assistant
+  const ownerId = 'almera_0123';
+  const chatId = randomUUID();
   const newChat = new Chat({
-    _id: randomUUID(),
+    _id: chatId,
     ownerId,
     title: 'DEFAULT',
   });
-  whitebeardAssistant.addChat({ chat: newChat });
+  const chatCreated = await whitebeardAssistant.addChat({ chat: newChat });
 
-  return whitebeardAssistant;
-};
-
-const working = async () => {
-  const whitebeardAssistant = setup();
-  const chats = await whitebeardAssistant.getChats(ownerId);
-  Logger.debug('Retrieve all chats by ownerId', {
-    eventName: 'whitebeardAssistant.getChats(ownerId)',
-    eventData: chats,
-  });
-
-  const { id } = chats[0];
-  Logger.debug('Retrieve id of first chat', {
-    eventName: 'chats[0].id',
-    eventData: id,
-  });
-
-  const chatFound = await whitebeardAssistant.getChat({ chatId: id });
-  Logger.debug('Getting chat by Id', {
-    eventName: 'whitebeardAssistant.getChat({ chatId: id })',
-    eventData: chatFound,
-  });
-
+  //Create messages and add into the chat created
   const message: IChatCompletionMessage = {
-    content: 'How much is 10 + 1?',
-    ownerId,
+    content: 'How much is 10 + 1 ?',
+    ownerId: String(chatCreated?.ownerId),
     role: 'user',
-    chatId: id,
+    chatId: String(chatCreated?.id),
   };
+  await whitebeardAssistant.addMessage(message);
 
-  whitebeardAssistant.addMessage(message);
-  Logger.debug('Add a new message to the chat', {
-    eventName: 'chatFound.addMessage()',
-    eventData: message,
-  });
+  // Send the chat (with all messages) to the ChatGPT
+  const resp = await whitebeardAssistant.sendChat(String(chatCreated?.id));
+  console.info(resp);
 
-  const resp = await whitebeardAssistant.sendChat(id);
-  Logger.debug('Sending all chat messages and getting the answer', {
-    eventName: 'whitebeardAssistant.sendMessage({ chatId: id })',
-    eventData: resp,
-  });
-
-  const allMessages = await whitebeardAssistant.getMessages({
-    chatId: id,
+  // All dialog will be stored in the chat
+  const chatMessages = await whitebeardAssistant.getMessages({
+    chatId,
     ownerId,
   });
-  Logger.debug('Getting all chat messages - history', {
-    eventName: 'chatFound.getMessages()',
-    eventData: allMessages,
-  });
-
-  Logger.debug('Getting the assistant context setup', {
-    eventName: 'whitebeardAssistant.context',
-    eventData: whitebeardAssistant.context,
-  });
+  console.info({ chatMessages });
 };
 
-working();
+main();
