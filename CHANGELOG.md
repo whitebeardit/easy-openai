@@ -1,3 +1,10 @@
+## [1.0.10](https://github.com/whitebeardit/easy-openai/compare/v1.0.9...v1.0.10) (2023-03-14)
+
+
+### Bug Fixes
+
+* add precess.env in openAI API ([61ee0de](https://github.com/whitebeardit/easy-openai/commit/61ee0debfc980995ac78e65c196c4fbd105289fb))
+
 ## [1.0.9](https://github.com/whitebeardit/easy-openai/compare/v1.0.8...v1.0.9) (2023-03-14)
 
 
