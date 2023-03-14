@@ -1,3 +1,10 @@
+## [1.0.2](https://github.com/whitebeardit/easy-openai/compare/v1.0.1...v1.0.2) (2023-03-14)
+
+
+### Bug Fixes
+
+* fixes errors on readme ([8429767](https://github.com/whitebeardit/easy-openai/commit/842976719cc99f0439f8fc4165edbd8cc4b79bb0))
+
 ## [1.0.1](https://github.com/whitebeardit/easy-openai/compare/v1.0.0...v1.0.1) (2023-03-14)
 
 
