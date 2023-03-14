@@ -77,9 +77,6 @@
     "singleQuote": true,
     "trailingComma": "all"
   },
-  "release": {
-    "extends": "@whitebeardit/whitebeard-standards/lib/vscode/configs/semantic-release/config"
-  },
   "main": "dist/src/openai/index.js",
   "types": "dist/index.d.ts",
   "files": [

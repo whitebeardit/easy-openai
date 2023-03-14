@@ -1,0 +1,30 @@
+{
+  "plugins": [
+    "@semantic-release/commit-analyzer",
+    "@semantic-release/release-notes-generator",
+    "@semantic-release/changelog",
+    [
+      "@semantic-release/npm",
+      {
+        "npmPublish": false
+      }
+    ],
+    [
+      "@semantic-release/git",
+      {
+        "message": "build: release <%= nextRelease.version %> [skip ci]",
+        "assets": [
+          "package.json",
+          "CHANGELOG.md"
+        ]
+      }
+    ]
+  ],
+  "branches": [
+    {
+      "name": "main"
+    }
+  ],
+  "type": "git",
+  "url": "git@github.com:whitebeardit/easy-openai.git"
+}
