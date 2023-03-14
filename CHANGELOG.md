@@ -1,3 +1,10 @@
+## [1.0.6](https://github.com/whitebeardit/easy-openai/compare/v1.0.5...v1.0.6) (2023-03-14)
+
+
+### Bug Fixes
+
+* add repositories into export lib ([828a382](https://github.com/whitebeardit/easy-openai/commit/828a3820aa473b3fc4ee69296311c8f2a3715b19))
+
 ## [1.0.5](https://github.com/whitebeardit/easy-openai/compare/v1.0.4...v1.0.5) (2023-03-14)
 
 
