@@ -1,5 +1,5 @@
 {
-  "name": "easy-openai",
+  "name": "@whitebeardit/easy-openai",
   "description": "Api to make your life easier when thinking about the openAI",
   "repository": "git@github.com:whitebeardit/easy-openai.git",
   "scripts": {
