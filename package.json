@@ -1,6 +1,6 @@
 {
   "name": "easy-openai",
-  "description": "Just a Boilerplate",
+  "description": "Api to make your life easier when thinking about the openAI",
   "repository": "git@github.com:whitebeardit/easy-openai.git",
   "scripts": {
     "test": "yarn run test:unit",
@@ -76,6 +76,9 @@
   "prettier": {
     "singleQuote": true,
     "trailingComma": "all"
+  },
+  "release": {
+    "extends": "@whitebeardit/whitebeard-standards/lib/vscode/configs/semantic-release/config"
   },
   "main": "dist/src/openai/index.js",
   "types": "dist/index.d.ts",
