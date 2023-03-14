@@ -61,7 +61,7 @@ const working = async () => {
   });
 
   const message: IChatCompletionMessage = {
-    content: 'Quanto é 10 + 1?',
+    content: 'How much is 10 + 1?',
     ownerId,
     role: 'user',
   };
