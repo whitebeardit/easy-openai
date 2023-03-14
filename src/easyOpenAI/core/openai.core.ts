@@ -1,6 +1,5 @@
 import { Configuration, OpenAIApi } from 'openai';
 import { Logger } from 'traceability';
-import * as env from '../../configurations/env-constants';
 
 export class OpenAI {
   private static _instance: OpenAI;
@@ -8,8 +7,8 @@ export class OpenAI {
   private readonly openai: OpenAIApi;
 
   private configuration = new Configuration({
-    organization: env.OPENAI_ORGANIZATION,
-    apiKey: env.OPENAI_API_KEY,
+    organization: process.env.OPENAI_ORGANIZATION,
+    apiKey: process.env.OPENAI_API_KEY,
   });
 
   private constructor() {
