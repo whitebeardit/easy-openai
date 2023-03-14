@@ -14,22 +14,20 @@ const ownerId = `almera_${randomUUID()}`;
 
 const setup = () => {
   const chatRepository = new ChatRepository();
-  const whitebeardAssistant = new Assistant(chatRepository, {
+  const messageRepository = new MessageRepository();
+
+  const whitebeardAssistant = new Assistant(chatRepository, messageRepository, {
     name: 'Whitebeard',
     humor: EHumor.SARCASTIC,
     model: EModel['GPT-3.5-TURBO'],
     id: randomUUID(),
   });
 
-  const messageRepository = new MessageRepository();
-  const newChat = new Chat(
-    {
-      _id: randomUUID(),
-      ownerId,
-      title: 'DEFAULT',
-    },
-    messageRepository,
-  );
+  const newChat = new Chat({
+    _id: randomUUID(),
+    ownerId,
+    title: 'DEFAULT',
+  });
   whitebeardAssistant.addChat({ chat: newChat });
 
   return whitebeardAssistant;
@@ -59,20 +57,25 @@ const working = async () => {
     content: 'How much is 10 + 1?',
     ownerId,
     role: 'user',
+    chatId: id,
   };
-  chatFound.addMessage(message);
+
+  whitebeardAssistant.addMessage(message);
   Logger.debug('Add a new message to the chat', {
     eventName: 'chatFound.addMessage()',
     eventData: message,
   });
 
-  const resp = await whitebeardAssistant.sendMessage({ chatId: id });
+  const resp = await whitebeardAssistant.sendChat(id);
   Logger.debug('Sending all chat messages and getting the answer', {
     eventName: 'whitebeardAssistant.sendMessage({ chatId: id })',
     eventData: resp,
   });
 
-  const allMessages = await chatFound.getMessages();
+  const allMessages = await whitebeardAssistant.getMessages({
+    chatId: id,
+    ownerId,
+  });
   Logger.debug('Getting all chat messages - history', {
     eventName: 'chatFound.getMessages()',
     eventData: allMessages,

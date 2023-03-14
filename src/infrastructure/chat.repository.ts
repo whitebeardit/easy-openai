@@ -1,14 +1,15 @@
 import { Logger } from 'traceability';
-import { Chat, IChatRepository } from '../easyOpenAI';
+import { IChatRepository } from '../easyOpenAI';
+import { IChat } from '../easyOpenAI/core';
 
 export class ChatRepository implements IChatRepository {
   //[ ]: Cache Rotation - Pegar da memória, e se não tiver na memória, carregar do repositório. Se atingiu o limite na memória, substituir a menos usada.
 
-  _chats: Map<String, Chat> = new Map();
+  _chats: Map<String, IChat> = new Map();
 
   _maxInMemory = 10;
 
-  addChat({ chat }: { chat: Chat }): Promise<Chat> {
+  addChat({ chat }: { chat: IChat }): Promise<IChat> {
     if (this._chats.has(chat.id)) {
       const error = new Error('This chat has already been added!');
       Logger.error(error.message);
@@ -18,7 +19,7 @@ export class ChatRepository implements IChatRepository {
     return Promise.resolve(chat);
   }
 
-  getChat({ chatId }: { chatId: string }): Promise<Chat> {
+  getChat({ chatId }: { chatId: string }): Promise<IChat> {
     const chat = this._chats.get(chatId);
     if (!chat) {
       const error = new Error('This chat does not exist!');
@@ -32,14 +33,14 @@ export class ChatRepository implements IChatRepository {
   getChats(
     ownerId: string,
     params?: { skip: number; limit: number },
-  ): Promise<Chat[]> {
+  ): Promise<IChat[]> {
     const chats = [...this._chats.values()].filter(
       (chat) => chat.ownerId === ownerId,
     );
 
     const chatsSorted = chats.sort((c1, c2) => {
-      if (c1._updatedAt === c2._updatedAt) return 0;
-      if (c1._updatedAt < c2._updatedAt) return -1;
+      if (c1.updatedAt === c2.updatedAt) return 0;
+      if (c1.updatedAt < c2.updatedAt) return -1;
       return 1;
     });
 

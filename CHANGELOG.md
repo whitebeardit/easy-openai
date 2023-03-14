@@ -1,3 +1,11 @@
+## [1.0.9](https://github.com/whitebeardit/easy-openai/compare/v1.0.8...v1.0.9) (2023-03-14)
+
+
+### Bug Fixes
+
+* add try/catch in addChat ([ab0ea5a](https://github.com/whitebeardit/easy-openai/commit/ab0ea5a9c04f2466750a753ae0a427e828e5fe03))
+* fix addChat to return the chat added ([ef3e7e1](https://github.com/whitebeardit/easy-openai/commit/ef3e7e169729b2faf19d71117cfe048f0178794e))
+
 ## [1.0.8](https://github.com/whitebeardit/easy-openai/compare/v1.0.7...v1.0.8) (2023-03-14)
 
 
