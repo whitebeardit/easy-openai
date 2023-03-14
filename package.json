@@ -23,7 +23,6 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
-    "@types/axios": "^0.14.0",
     "@types/bcryptjs": "^2.4.2",
     "bcryptjs": "^2.4.3",
     "dotenv": "^10.0.0",
@@ -41,7 +40,6 @@
     "@semantic-release/exec": "^6.0.3",
     "@semantic-release/git": "^10.0.1",
     "@semantic-release/release-notes-generator": "^10.0.3",
-    "@types/dotenv": "^8.2.0",
     "@types/jest": "^28.1.0",
     "@types/node": "^16.18.15",
     "@types/uuid": "^8.3.0",
