@@ -6,4 +6,8 @@ export {
   IChatCompletionMessage,
   IChatCompletionMessageBase,
   OpenAI,
+  ChatRepository,
+  IChatRepository,
+  IMessageRepository,
+  MessageRepository,
 } from './openAI/';
