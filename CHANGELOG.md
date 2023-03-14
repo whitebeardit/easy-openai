@@ -1,3 +1,10 @@
+## [1.0.1](https://github.com/whitebeardit/easy-openai/compare/v1.0.0...v1.0.1) (2023-03-14)
+
+
+### Bug Fixes
+
+* exporting all entities into index.ts ([d11c9b8](https://github.com/whitebeardit/easy-openai/commit/d11c9b83062cf5f97c7770d0c546c77a2c3a6713))
+
 # 1.0.0 (2023-03-14)
 
 
