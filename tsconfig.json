@@ -1,5 +1,6 @@
 {
   "compilerOptions": {
+    "declaration": true,
     "target": "es2019",
     "moduleResolution": "node",
     "module": "commonjs",
@@ -7,7 +8,7 @@
     "sourceMap": true,
     "outDir": "dist",
     "allowJs": true,
-    "rootDir": "./",
+    "rootDir": "./src",
     "strict": true,
     "noImplicitAny": true,
     "strictNullChecks": true,
@@ -19,10 +20,10 @@
     "noImplicitReturns": true,
     "esModuleInterop": true,
     "allowSyntheticDefaultImports": true,
-    "types": ["jest", "node"]
-    // "baseUrl": "./"
+    "types": ["jest", "node"],
+    // "baseUrl": "./",
+    "skipLibCheck": true
   },
   "include": ["src/**/*.ts", "jest/**/*.ts"],
-  "exclude": ["node_modules"],
-  "extends": "@tsconfig/node16/tsconfig.json"
+  "exclude": ["node_modules"]
 }

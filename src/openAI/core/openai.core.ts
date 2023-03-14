@@ -14,6 +14,8 @@ export class OpenAI {
 
   private constructor() {
     this.openai = new OpenAIApi(this.configuration);
+    console.info('OpenAIApi configured', { configuration: this.configuration });
+
     Logger.info('OpenAIApi Instanced');
   }
 

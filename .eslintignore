@@ -1,6 +1,11 @@
 /*.js
 node_modules
 lib
+dist
+dist/
+dist/*
 __test__/
 jest.config.ts
 jest.setup.redis-mock.ts
+tsconfig.json
+jest

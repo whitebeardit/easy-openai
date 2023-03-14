@@ -55,9 +55,6 @@ export class Chat {
   }
 
   addMessage(params: IChatCompletionMessage) {
-    if (params.role === 'user') {
-      params.name = this.ownerId;
-    }
     params.ownerId = this.ownerId;
     this._messageRepository.addMessage(params);
     this._updatedAt = new Date().getTime();

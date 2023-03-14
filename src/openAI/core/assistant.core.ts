@@ -1,6 +1,11 @@
 import { randomUUID } from 'crypto';
+import { CreateChatCompletionResponse } from 'openai';
 import { Logger } from 'traceability';
-import { Chat, IChatCompletionMessageBase } from './chat.core';
+import {
+  Chat,
+  IChatCompletionMessage,
+  IChatCompletionMessageBase,
+} from './chat.core';
 import { OpenAI } from './openai.core';
 import { IChatRepository } from './repository/interfaces/chat.repository.interface';
 
@@ -55,13 +60,11 @@ export class Assistant {
       {
         role: 'system',
         content: `You are a ${this.humor} assistant.`,
-        name: 'Whitebeard',
         ownerId: 'Whitebeard',
       },
       {
         role: 'system',
         content: `Your name is ${this.name}.`,
-        name: 'Whitebeard',
         ownerId: 'Whitebeard',
       },
     );
@@ -117,7 +120,39 @@ export class Assistant {
     return this._openAIApi;
   }
 
-  async sendMessage({ chatId }: { chatId: string }) {
+  private extractAnswer(chat: Chat, answer: CreateChatCompletionResponse) {
+    try {
+      const answerMessage: IChatCompletionMessage = {
+        content: answer.choices[0].message?.content || '',
+        role: answer.choices[0].message?.role || 'assistant',
+        usage: answer.usage,
+        finish_reason: answer.choices[0].finish_reason,
+        id: answer.id,
+        created: answer.created,
+        object: answer.object,
+        ownerId: chat.ownerId,
+      };
+      return answerMessage;
+    } catch (error: any) {
+      Logger.error(error.message);
+      return;
+    }
+  }
+
+  private async prepareMessageToSend(chat: Chat) {
+    Logger.info('Preparing messages to send ...');
+    const messages = [...this.context, ...(await chat.getMessages())];
+    const messageToSend = messages.map((m) => {
+      return { role: m.role, content: m.content, name: m.ownerId };
+    });
+    return messageToSend;
+  }
+
+  async sendMessage({
+    chatId,
+  }: {
+    chatId: string;
+  }): Promise<IChatCompletionMessage | undefined> {
     const chat = await this.getChat({ chatId });
     if (!chat) {
       const error = new Error('Chat was not found!');
@@ -126,36 +161,22 @@ export class Assistant {
     }
 
     Logger.debug(`Sending messages from chat ${chatId}`);
-    const messagesToSend: IChatCompletionMessageBase[] = [
-      ...this.context,
-      ...(await chat.getMessages()),
-    ];
+    const messageToSend = await this.prepareMessageToSend(chat);
 
-    const answer = await this.getOpenAIApi().createChatCompletion({
-      messages: messagesToSend,
+    const openAIAnswer = await this.getOpenAIApi().createChatCompletion({
+      messages: messageToSend,
       model: this.model,
       temperature: 0.7,
     });
 
     Logger.debug(`Messages from chat ${chatId} was sent to OpenAI`);
-    if ((answer && answer?.data.choices[0].message, answer?.data.usage)) {
-      chat.addMessage({
-        content: answer?.data.choices[0].message?.content || '',
-        role: answer?.data.choices[0].message?.role || 'assistant',
-        name: this.name,
-        usage: answer?.data.usage,
-        finish_reason: answer?.data.choices[0].finish_reason,
-        id: answer?.data.id,
-        created: answer?.data.created,
-        object: answer?.data.object,
-        ownerId: chat.ownerId,
-      });
+    const answerMessage = this.extractAnswer(chat, openAIAnswer.data);
+    if (answerMessage) chat.addMessage(answerMessage);
 
-      Logger.debug(
-        `Message id: ${answer?.data.id} was included into chat ${chatId}`,
-      );
-    }
+    Logger.debug(
+      `Message id: ${openAIAnswer.data.id} was included into chat ${chatId}`,
+    );
 
-    return answer;
+    return answerMessage;
   }
 }
