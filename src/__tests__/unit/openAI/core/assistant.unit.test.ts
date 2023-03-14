@@ -44,7 +44,7 @@ describe('Assistant', () => {
     const chat = new Chat(
       {
         _id: 'My_Chat_ID',
-        ownerId: 'almera',
+        ownerId: 'Almera',
         title: 'My Subject',
         description: 'My Description',
       },
@@ -84,7 +84,7 @@ describe('Assistant', () => {
       created: 1678672874,
       content: 'Give me more context!',
       role: 'assistant',
-      name: 'Whitebeard',
+      ownerId: 'Almera',
       usage: { prompt_tokens: 60, completion_tokens: 17, total_tokens: 77 },
     });
   });
