@@ -106,6 +106,7 @@ export class Assistant {
 
   async addChat({ chat }: { chat: Chat }) {
     await this._chatRepository.addChat({ chat });
+    return chat;
   }
 
   async getChat({ chatId }: { chatId: string }) {
