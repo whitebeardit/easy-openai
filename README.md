@@ -4,9 +4,9 @@ This is a way to turn easier creation of assistants using the GPT CHAT.
 
 # How to use
 
-First of all, Is important to highlight that We need two repositories implementing `IMessageRepository` and `IChatRepository`. So, as example we will use the repositories already created. They are: `MessageRepository` and `ChatRepository`
+First of all, Is important to highlight that We need two repositories implementing `IMessageRepository` and `IChatRepository`. So, as an example we will use the repositories already created. They are: `MessageRepository` and `ChatRepository`
 
-> We created the MessageRepository and ChatRepository just to use as an example. These repositories don't use any database. It was implemented in memory. If you want to use it in production. You should create your own repository, using some database that implements these two interfaces `IMessageRepository` and `IChatRepository`.
+> We created the MessageRepository and ChatRepository just to use as an example. These repositories don't use any database. It was implemented in memory. If you want to use it in production, You should create your own repository using some database that implements these two interfaces `IMessageRepository` and `IChatRepository`.
 
 ## Environments variables
 
@@ -113,7 +113,7 @@ const resp = await whitebeardAssistant.sendMessage({ chatId: id });
 }
 ```
 
-> If you want send only one message, you should create a chat message with only one message. We send all messages into chat because the assistant needs context to answer more precisely,
+> If you want send only one message, you should create a chat message with only one message. We send all messages into chat because the assistant needs of the context to answer more precisely,
 
 ### Get all messages - Questions ans Answers in a chat
 
