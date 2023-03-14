@@ -220,3 +220,7 @@ const main = async () => {
 
 main();
 ```
+
+# Here you can find a full project as example:
+
+An easy hello world [OpenAi for Dummies :-)](https://github.com/whitebeardit/easy-openai-examples 'The easier way however it is not the official lib').
