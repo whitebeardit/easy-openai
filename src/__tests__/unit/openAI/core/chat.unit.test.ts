@@ -1,5 +1,5 @@
 import { MessageRepository } from '../../../../infrastructure/message.repository';
-import { Chat } from '../../../../openAI/core/chat.core';
+import { Chat } from '../../../../';
 
 describe('Chat messages', () => {
   beforeAll(async () => {});

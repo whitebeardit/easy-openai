@@ -1,11 +1,6 @@
 import { ChatRepository } from '../../../../infrastructure/chat.repository';
 import { MessageRepository } from '../../../../infrastructure/message.repository';
-import {
-  Assistant,
-  EHumor,
-  EModel,
-} from '../../../../openAI/core/assistant.core';
-import { Chat } from '../../../../openAI/core/chat.core';
+import { Assistant, EHumor, EModel, Chat } from '../../../..';
 import { createChatCompletionMock } from './createChatCompletion.mock';
 
 describe('Assistant', () => {
