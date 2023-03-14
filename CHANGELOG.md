@@ -1,3 +1,12 @@
+## [1.0.7](https://github.com/whitebeardit/easy-openai/compare/v1.0.6...v1.0.7) (2023-03-14)
+
+
+### Bug Fixes
+
+* changes the dir name ([ed16188](https://github.com/whitebeardit/easy-openai/commit/ed16188edf962c9d7a7bc4e954cc47e03609d18a))
+* create the repository memory ([e136405](https://github.com/whitebeardit/easy-openai/commit/e136405337e21d36774cfe0d5c47a61f916ea2ed))
+* fixes tests ([7147e84](https://github.com/whitebeardit/easy-openai/commit/7147e848d30294b618e56bdc8eed39f192e18c9f))
+
 ## [1.0.6](https://github.com/whitebeardit/easy-openai/compare/v1.0.5...v1.0.6) (2023-03-14)
 
 
