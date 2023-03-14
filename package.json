@@ -77,8 +77,8 @@
     "singleQuote": true,
     "trailingComma": "all"
   },
-  "main": "dist/src/openai/index.js",
-  "types": "dist/index.d.ts",
+  "main": "dist/src/index.js",
+  "types": "dist/src/index.d.ts",
   "files": [
     "/dist"
   ],

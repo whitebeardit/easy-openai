@@ -8,7 +8,6 @@
     "sourceMap": true,
     "outDir": "dist",
     "allowJs": true,
-    "rootDir": "./",
     "strict": true,
     "noImplicitAny": true,
     "strictNullChecks": true,
@@ -21,9 +20,8 @@
     "esModuleInterop": true,
     "allowSyntheticDefaultImports": true,
     "types": ["jest", "node"],
-    // "baseUrl": "./",
     "skipLibCheck": true
   },
-  "include": ["src/**/*.ts", "jest/**/*.ts"],
-  "exclude": ["node_modules"]
+  "include": ["src/**/*.ts"],
+  "exclude": ["node_modules", "jest/**/*.ts", "src/__tests__/*"]
 }

@@ -4,7 +4,9 @@ lib
 dist
 dist/
 dist/*
-__test__/
+
+src/__tests__/*
+
 jest.config.ts
 jest.setup.redis-mock.ts
 tsconfig.json
