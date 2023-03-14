@@ -1,3 +1,13 @@
+## [1.0.3](https://github.com/whitebeardit/easy-openai/compare/v1.0.2...v1.0.3) (2023-03-14)
+
+
+### Bug Fixes
+
+* add build on CI ([151f524](https://github.com/whitebeardit/easy-openai/commit/151f52487816ba15b78c33e49a2ac45c56f53b27))
+* chang config to put npmPublish: false ([58f4d26](https://github.com/whitebeardit/easy-openai/commit/58f4d262abfffae40d444a567f071a43bfe42d7c))
+* chang config to put npmPublish: true ([35bd81a](https://github.com/whitebeardit/easy-openai/commit/35bd81a18973868a33ed4b63c92372ff243d8d28))
+* creating npmrc ([8288b35](https://github.com/whitebeardit/easy-openai/commit/8288b353fa9ac51f99fc3d9c06a3dac9f6763c5d))
+
 ## [1.0.2](https://github.com/whitebeardit/easy-openai/compare/v1.0.1...v1.0.2) (2023-03-14)
 
 
