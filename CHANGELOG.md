@@ -1,3 +1,10 @@
+## [1.0.4](https://github.com/whitebeardit/easy-openai/compare/v1.0.3...v1.0.4) (2023-03-14)
+
+
+### Bug Fixes
+
+* files in package.json and tsconfig ([617e4af](https://github.com/whitebeardit/easy-openai/commit/617e4af322d9dc18dc08f1244f5baf635c1682e5))
+
 ## [1.0.3](https://github.com/whitebeardit/easy-openai/compare/v1.0.2...v1.0.3) (2023-03-14)
 
 
