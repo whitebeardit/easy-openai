@@ -1,5 +1,5 @@
 import { Logger } from 'traceability';
-import { Chat, IChatRepository } from '../';
+import { Chat, IChatRepository } from '../easyOpenAI';
 
 export class ChatRepository implements IChatRepository {
   //[ ]: Cache Rotation - Pegar da memória, e se não tiver na memória, carregar do repositório. Se atingiu o limite na memória, substituir a menos usada.
