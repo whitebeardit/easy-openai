@@ -34,6 +34,7 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.WB_GH_PACKAGE_TOKEN }}
         run: |
           yarn release
+          echo "//npm.pkg.github.com/:_authToken=${{ secrets.GH_PACKAGE_TOKEN }}" >>  .npmrc
 
       - run: npm publish
         env:
