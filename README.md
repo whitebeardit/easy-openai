@@ -8,6 +8,17 @@ First of all, Is important to highlight that We need two repositories implementi
 
 > We created the MessageRepository and ChatRepository just to use as an example. These repositories don't use any database. It was implemented in memory. If you want to use it in production. You should create your own repository, using some database that implements these two interfaces `IMessageRepository` and `IChatRepository`.
 
+## Environments variables
+
+We need create two environments variables to works fine. They are:
+
+```js
+OPENAI_API_KEY = 'sk-YOR_OPENAI_KEY';
+OPENAI_ORGANIZATION = 'org-YOUR_ORGANIZATION_ID';
+```
+
+So, you can put this in to a .env and use the lib `dotenv` to load the variables.
+
 ## Create a assistant with the desired humor and name
 
 ```ts
