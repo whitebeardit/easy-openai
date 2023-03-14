@@ -14,6 +14,7 @@ import {
 
 import { loggerConfiguration } from '../configurations/log.conf';
 Logger.configure(loggerConfiguration);
+Logger.level = 'info';
 
 const ownerId = `almera_${randomUUID()}`;
 
@@ -43,19 +44,19 @@ const setup = () => {
 const working = async () => {
   const whitebeardAssistant = setup();
   const chats = await whitebeardAssistant.getChats(ownerId);
-  Logger.info('Retrieve all chats by ownerId', {
+  Logger.debug('Retrieve all chats by ownerId', {
     eventName: 'whitebeardAssistant.getChats(ownerId)',
     eventData: chats,
   });
 
   const { id } = chats[0];
-  Logger.info('Retrieve id of first chat', {
+  Logger.debug('Retrieve id of first chat', {
     eventName: 'chats[0].id',
     eventData: id,
   });
 
   const chatFound = await whitebeardAssistant.getChat({ chatId: id });
-  Logger.info('Getting chat by Id', {
+  Logger.debug('Getting chat by Id', {
     eventName: 'whitebeardAssistant.getChat({ chatId: id })',
     eventData: chatFound,
   });
@@ -66,24 +67,24 @@ const working = async () => {
     role: 'user',
   };
   chatFound.addMessage(message);
-  Logger.info('Add a new message to the chat', {
+  Logger.debug('Add a new message to the chat', {
     eventName: 'chatFound.addMessage()',
     eventData: message,
   });
 
   const resp = await whitebeardAssistant.sendMessage({ chatId: id });
-  Logger.info('Sending all chat messages and getting the answer', {
+  Logger.debug('Sending all chat messages and getting the answer', {
     eventName: 'whitebeardAssistant.sendMessage({ chatId: id })',
     eventData: resp,
   });
 
   const allMessages = await chatFound.getMessages();
-  Logger.info('Getting all chat messages - history', {
+  Logger.debug('Getting all chat messages - history', {
     eventName: 'chatFound.getMessages()',
     eventData: allMessages,
   });
 
-  Logger.info('Getting the assistant context setup', {
+  Logger.debug('Getting the assistant context setup', {
     eventName: 'whitebeardAssistant.context',
     eventData: whitebeardAssistant.context,
   });

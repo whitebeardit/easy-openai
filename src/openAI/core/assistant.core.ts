@@ -173,8 +173,8 @@ export class Assistant {
     const answerMessage = this.extractAnswer(chat, openAIAnswer.data);
     if (answerMessage) chat.addMessage(answerMessage);
 
-    Logger.debug(
-      `Message id: ${openAIAnswer.data.id} was included into chat ${chatId}`,
+    Logger.info(
+      `Message id: ${openAIAnswer.data.id} was included into chat ${chatId} and has been sent to openAI`,
     );
 
     return answerMessage;
