@@ -4,13 +4,7 @@ import { randomUUID } from 'crypto';
 import { ChatRepository } from '../infrastructure/chat.repository';
 import { MessageRepository } from '../infrastructure/message.repository';
 import { Logger } from 'traceability';
-import {
-  Assistant,
-  Chat,
-  EHumor,
-  EModel,
-  IChatCompletionMessage,
-} from '../openAI';
+import { Assistant, Chat, EHumor, EModel, IChatCompletionMessage } from '../';
 
 import { loggerConfiguration } from '../configurations/log.conf';
 Logger.configure(loggerConfiguration);

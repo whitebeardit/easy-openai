@@ -6,8 +6,8 @@ export {
   IChatCompletionMessage,
   IChatCompletionMessageBase,
   OpenAI,
-  ChatRepository,
   IChatRepository,
   IMessageRepository,
-  MessageRepository,
-} from './openAI/';
+} from './easy-openai/';
+
+export * as memoryRepository from './infrastructure';
