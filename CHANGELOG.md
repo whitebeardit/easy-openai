@@ -1,3 +1,10 @@
+## [1.0.5](https://github.com/whitebeardit/easy-openai/compare/v1.0.4...v1.0.5) (2023-03-14)
+
+
+### Bug Fixes
+
+* reverting ([ffacfd0](https://github.com/whitebeardit/easy-openai/commit/ffacfd0fb33cbdca2f73cd0c1c17c7495a414935))
+
 ## [1.0.4](https://github.com/whitebeardit/easy-openai/compare/v1.0.3...v1.0.4) (2023-03-14)
 
 
