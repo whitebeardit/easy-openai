@@ -2,10 +2,11 @@ import { randomUUID } from 'crypto';
 import { CreateChatCompletionResponse } from 'openai';
 import { Logger } from 'traceability';
 import {
-  Chat,
+  IChat,
   IChatCompletionMessage,
   IChatCompletionMessageBase,
   IChatRepository,
+  IMessageRepository,
   OpenAI,
 } from '.';
 
@@ -35,8 +36,11 @@ export class Assistant {
 
   _chatRepository: IChatRepository;
 
+  _messageRepository: IMessageRepository;
+
   constructor(
     chatRepository: IChatRepository,
+    messageRepository: IMessageRepository,
     params?: {
       name?: string;
       humor?: EHumor;
@@ -51,6 +55,7 @@ export class Assistant {
       this.model = params.model || this.model;
     }
     this._chatRepository = chatRepository;
+    this._messageRepository = messageRepository;
     this.setup();
   }
 
@@ -104,12 +109,21 @@ export class Assistant {
     return this._id;
   }
 
-  async addChat({ chat }: { chat: Chat }) {
-    await this._chatRepository.addChat({ chat });
+  async addChat({ chat }: { chat: IChat }) {
+    try {
+      return await this._chatRepository.addChat({ chat });
+    } catch (error: any) {
+      Logger.error(`${error.message}`, {
+        eventName: `Assistant.addChat`,
+        eventData: error,
+      });
+      return;
+    }
   }
 
   async getChat({ chatId }: { chatId: string }) {
-    return this._chatRepository.getChat({ chatId });
+    const chat = await this._chatRepository.getChat({ chatId });
+    return chat;
   }
 
   async getChats(ownerIdId: string, params?: { skip: number; limit: number }) {
@@ -120,7 +134,7 @@ export class Assistant {
     return this._openAIApi;
   }
 
-  private extractAnswer(chat: Chat, answer: CreateChatCompletionResponse) {
+  private extractAnswer(chat: IChat, answer: CreateChatCompletionResponse) {
     try {
       const answerMessage: IChatCompletionMessage = {
         content: answer.choices[0].message?.content || '',
@@ -131,6 +145,7 @@ export class Assistant {
         created: answer.created,
         object: answer.object,
         ownerId: chat.ownerId,
+        chatId: chat.id,
       };
       return answerMessage;
     } catch (error: any) {
@@ -139,20 +154,29 @@ export class Assistant {
     }
   }
 
-  private async prepareMessageToSend(chat: Chat) {
+  private async prepareMessageToSend(chat: IChat) {
     Logger.info('Preparing messages to send ...');
-    const messages = [...this.context, ...(await chat.getMessages())];
+    const chatMessages = await this._messageRepository.getMessages(
+      chat.ownerId,
+      chat.id,
+    );
+    const messages = [...this.context, ...chatMessages];
     const messageToSend = messages.map((m) => {
       return { role: m.role, content: m.content, name: m.ownerId };
     });
     return messageToSend;
   }
 
-  async sendMessage({
-    chatId,
-  }: {
-    chatId: string;
-  }): Promise<IChatCompletionMessage | undefined> {
+  async addMessage(message: IChatCompletionMessage) {
+    return this._messageRepository.addMessage(message);
+  }
+
+  async getMessages({ chatId, ownerId }: { ownerId: string; chatId: string }) {
+    const messages = await this._messageRepository.getMessages(ownerId, chatId);
+    return messages;
+  }
+
+  async sendChat(chatId: string): Promise<IChatCompletionMessage | undefined> {
     const chat = await this.getChat({ chatId });
     if (!chat) {
       const error = new Error('Chat was not found!');
@@ -171,7 +195,7 @@ export class Assistant {
 
     Logger.debug(`Messages from chat ${chatId} was sent to OpenAI`);
     const answerMessage = this.extractAnswer(chat, openAIAnswer.data);
-    if (answerMessage) chat.addMessage(answerMessage);
+    if (answerMessage) this._messageRepository.addMessage(answerMessage);
 
     Logger.info(
       `Message id: ${openAIAnswer.data.id} was included into chat ${chatId} and has been sent to openAI`,

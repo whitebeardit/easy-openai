@@ -1,10 +1,10 @@
-import { Chat } from '../..';
+import { IChat } from '../..';
 
 export interface IChatRepository {
-  addChat({ chat }: { chat: Chat }): Promise<void>;
-  getChat({ chatId }: { chatId: string }): Promise<Chat>;
+  addChat({ chat }: { chat: IChat }): Promise<IChat>;
+  getChat({ chatId }: { chatId: string }): Promise<IChat>;
   getChats(
     ownerId: string,
     params?: { skip: number; limit: number },
-  ): Promise<Chat[]>;
+  ): Promise<IChat[]>;
 }

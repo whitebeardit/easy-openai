@@ -7,13 +7,14 @@ export class MessageRepository implements IMessageRepository {
 
   getMessages(
     ownerId: string,
+    chatId: string,
     params?: {
       skip: number;
       limit: number;
     },
   ): Promise<IChatCompletionMessage[]> {
     let result = this._messages.filter(
-      (message) => message.ownerId === ownerId,
+      (message) => message.ownerId === ownerId && message.chatId === chatId,
     );
 
     if (params) {
@@ -37,8 +38,8 @@ export class MessageRepository implements IMessageRepository {
     return Promise.resolve(result);
   }
 
-  addMessage(params: IChatCompletionMessage): Promise<void> {
+  addMessage(params: IChatCompletionMessage): Promise<IChatCompletionMessage> {
     this._messages.push(params);
-    return Promise.resolve();
+    return Promise.resolve(params);
   }
 }
