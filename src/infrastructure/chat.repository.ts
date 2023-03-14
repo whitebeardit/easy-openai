@@ -8,14 +8,14 @@ export class ChatRepository implements IChatRepository {
 
   _maxInMemory = 10;
 
-  addChat({ chat }: { chat: Chat }): Promise<void> {
+  addChat({ chat }: { chat: Chat }): Promise<Chat> {
     if (this._chats.has(chat.id)) {
       const error = new Error('This chat has already been added!');
       Logger.error(error.message);
       throw error;
     }
     this._chats.set(chat.id, chat);
-    return Promise.resolve();
+    return Promise.resolve(chat);
   }
 
   getChat({ chatId }: { chatId: string }): Promise<Chat> {

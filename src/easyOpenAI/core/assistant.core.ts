@@ -105,8 +105,15 @@ export class Assistant {
   }
 
   async addChat({ chat }: { chat: Chat }) {
-    await this._chatRepository.addChat({ chat });
-    return chat;
+    try {
+      return await this._chatRepository.addChat({ chat });
+    } catch (error: any) {
+      Logger.error(`${error.message}`, {
+        eventName: `Assistant.addChat`,
+        eventData: error,
+      });
+      return;
+    }
   }
 
   async getChat({ chatId }: { chatId: string }) {

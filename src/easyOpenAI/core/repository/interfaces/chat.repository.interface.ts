@@ -1,7 +1,7 @@
 import { Chat } from '../..';
 
 export interface IChatRepository {
-  addChat({ chat }: { chat: Chat }): Promise<void>;
+  addChat({ chat }: { chat: Chat }): Promise<Chat>;
   getChat({ chatId }: { chatId: string }): Promise<Chat>;
   getChats(
     ownerId: string,
