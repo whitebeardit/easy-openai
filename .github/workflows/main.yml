@@ -27,6 +27,7 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.WB_GH_PACKAGE_TOKEN }}
         run: |
           yarn
+          yarn build
           yarn test
 
       - name: Release
