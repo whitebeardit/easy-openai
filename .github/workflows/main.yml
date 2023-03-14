@@ -33,8 +33,8 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.WB_GH_PACKAGE_TOKEN }}
         run: |
-          yarn release
           echo "//npm.pkg.github.com/:_authToken=${{ secrets.WB_EASY_OPENAI_PACKAGE_TOKEN }}" >>  .npmrc
+          yarn release
 
       - run: npm publish
         env:
