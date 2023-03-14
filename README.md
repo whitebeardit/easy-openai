@@ -2,6 +2,34 @@
 
 This is a way to turn easier creation of assistants using the GPT CHAT.
 
+# Install Guide
+
+## Install using yarn
+
+```bash
+yarn add @whitebeardit/easy-openai
+```
+
+## Problems known
+
+If you face the following error when compiling your project:
+
+```bash
+TS2304: Cannot find name 'File'.
+```
+
+Edit your `tsconfig.json` , and in `compileOptions` set the property `"skipLibCheck"` `true` as a following:
+
+```json
+{
+  "compilerOptions": {
+    //  ...
+    "skipLibCheck": true
+  }
+  // ...
+}
+```
+
 # How to use
 
 First of all, Is important to highlight that We need two repositories implementing `IMessageRepository` and `IChatRepository`. So, as an example we will use the repositories already created. They are: `MessageRepository` and `ChatRepository`
@@ -140,4 +168,55 @@ The return will be something like:
     "chatId": "56609fc4-1800-495d-90ee-a887aaf6a493"
   }
 ]
+```
+
+### Here am entire code as example:
+
+```ts
+import dotenv from 'dotenv';
+dotenv.config({ path: './environments/.env' });
+
+import { randomUUID } from 'crypto';
+import { Assistant, Chat, IChatCompletionMessage, memoryRepository } from '../';
+const { ChatRepository, MessageRepository } = memoryRepository;
+
+const main = async () => {
+  const chatRepository = new ChatRepository();
+  const messageRepository = new MessageRepository();
+
+  const whitebeardAssistant = new Assistant(chatRepository, messageRepository);
+  console.info(whitebeardAssistant.context);
+
+  // Create a new Chat and add it on the assistant
+  const ownerId = 'almera_0123';
+  const chatId = randomUUID();
+  const newChat = new Chat({
+    _id: chatId,
+    ownerId,
+    title: 'DEFAULT',
+  });
+  const chatCreated = await whitebeardAssistant.addChat({ chat: newChat });
+
+  //Create messages and add into the chat created
+  const message: IChatCompletionMessage = {
+    content: 'How much is 10 + 1 ?',
+    ownerId: String(chatCreated?.ownerId),
+    role: 'user',
+    chatId: String(chatCreated?.id),
+  };
+  await whitebeardAssistant.addMessage(message);
+
+  // Send the chat (with all messages) to the ChatGPT
+  const resp = await whitebeardAssistant.sendChat(String(chatCreated?.id));
+  console.info(resp);
+
+  // All dialog will be stored in the chat
+  const chatMessages = await whitebeardAssistant.getMessages({
+    chatId,
+    ownerId,
+  });
+  console.info({ chatMessages });
+};
+
+main();
 ```
