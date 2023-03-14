@@ -4,6 +4,10 @@ This is a way to turn easier creation of assistants using the GPT CHAT.
 
 # How to use
 
+First of all, Is important to highlight that We need two repositories implementing `IMessageRepository` and `IChatRepository`. So, as example we will use the repositories already created. They are: `MessageRepository` and `ChatRepository`
+
+> We created the MessageRepository and ChatRepository just to use as an example. These repositories don't use any database. It was implemented in memory. If you want to use it in production. You should create your own repository, using some database that implements these two interfaces `IMessageRepository` and `IChatRepository`.
+
 ## Create a assistant with the desired humor and name
 
 ```ts
