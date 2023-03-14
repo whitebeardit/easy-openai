@@ -1,3 +1,10 @@
+## [1.0.8](https://github.com/whitebeardit/easy-openai/compare/v1.0.7...v1.0.8) (2023-03-14)
+
+
+### Bug Fixes
+
+* removes the @types/dotenv and @types/axios ([2c253de](https://github.com/whitebeardit/easy-openai/commit/2c253de3cf9f151d301dfe36f7f5850e99279756))
+
 ## [1.0.7](https://github.com/whitebeardit/easy-openai/compare/v1.0.6...v1.0.7) (2023-03-14)
 
 
