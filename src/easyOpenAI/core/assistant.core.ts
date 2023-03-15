@@ -19,6 +19,7 @@ export enum EHumor {
 export enum EModel {
   'GPT-3.5-TURBO' = 'gpt-3.5-turbo',
   'GPT-3.5-TURBO-0301' = 'gpt-3.5-turbo-0301',
+  'TEXT-DAVINCI-003' = 'text-davinci-003',
 }
 
 export class Assistant {
@@ -61,18 +62,11 @@ export class Assistant {
 
   private setup() {
     this.context.splice(0);
-    this.context.push(
-      {
-        role: 'system',
-        content: `You are a ${this.humor} assistant.`,
-        ownerId: 'Whitebeard',
-      },
-      {
-        role: 'system',
-        content: `Your name is ${this.name}.`,
-        ownerId: 'Whitebeard',
-      },
-    );
+    this.context.push({
+      role: 'system',
+      content: `You are a ${this.humor} assistant and your name is ${this.name}.`,
+      ownerId: 'Whitebeard',
+    });
   }
 
   set humor(humor: EHumor) {
