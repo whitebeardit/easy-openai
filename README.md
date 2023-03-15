@@ -1,3 +1,6 @@
+<a href="https://www.buymeacoffee.com/almerindo" target="_blank"><img src="https://cdn.buymeacoffee.com/buttons/default-orange.png" alt="Buy Me A Coffee" height="41" width="174"></a>
+
+
 # easy-openAI
 
 This is a way to turn easier creation of assistants using the GPT CHAT.
@@ -224,3 +227,5 @@ main();
 # Here you can find a full project as example:
 
 An easy hello world [OpenAi for Dummies :-)](https://github.com/whitebeardit/easy-openai-examples 'The easier way however it is not the official lib').
+
+<a href="https://www.buymeacoffee.com/almerindo" target="_blank"><img src="https://cdn.buymeacoffee.com/buttons/default-orange.png" alt="Buy Me A Coffee" height="41" width="174"></a>
