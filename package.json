@@ -80,7 +80,7 @@
   "files": [
     "/dist"
   ],
-  "version": "1.0.12",
+  "version": "1.0.13",
   "publishConfig": {
     "@whitebeardit:registry": "https://npm.pkg.github.com"
   }

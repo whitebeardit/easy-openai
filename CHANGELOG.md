@@ -1,3 +1,10 @@
+## [1.0.13](https://github.com/whitebeardit/easy-openai/compare/v1.0.12...v1.0.13) (2023-03-15)
+
+
+### Bug Fixes
+
+* remove name from prepareMessagesToSend to avoid openAI missconfigurations ([8ca063b](https://github.com/whitebeardit/easy-openai/commit/8ca063b49f41bc57f9f68fddc2a929c253e5bc49))
+
 ## [1.0.12](https://github.com/whitebeardit/easy-openai/compare/v1.0.11...v1.0.12) (2023-03-15)
 
 
