@@ -1,3 +1,10 @@
+## [1.0.12](https://github.com/whitebeardit/easy-openai/compare/v1.0.11...v1.0.12) (2023-03-15)
+
+
+### Bug Fixes
+
+* name and humor ([2f22131](https://github.com/whitebeardit/easy-openai/commit/2f221310c9873ec53afdc70ea5d72b2ee1d236b1))
+
 ## [1.0.11](https://github.com/whitebeardit/easy-openai/compare/v1.0.10...v1.0.11) (2023-03-14)
 
 
