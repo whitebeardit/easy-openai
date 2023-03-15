@@ -17,7 +17,7 @@ describe('Assistant', () => {
     const messageRepository = new MessageRepository();
 
     const assistant = new Assistant(chatRepository, messageRepository);
-    expect(assistant.context.length).toBe(2);
+    expect(assistant.context.length).toBe(1);
     expect(assistant.humor).toBe(EHumor.SARCASTIC);
     expect(assistant.model).toBe(EModel['GPT-3.5-TURBO']);
     expect(assistant.name).toBe('Whitebeard');
