@@ -156,7 +156,7 @@ export class Assistant {
     );
     const messages = [...this.context, ...chatMessages];
     const messageToSend = messages.map((m) => {
-      return { role: m.role, content: m.content, name: m.ownerId };
+      return { role: m.role, content: m.content };
     });
     return messageToSend;
   }
