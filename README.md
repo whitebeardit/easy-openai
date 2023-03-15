@@ -1,6 +1,5 @@
 <a href="https://www.buymeacoffee.com/almerindo" target="_blank"><img src="https://cdn.buymeacoffee.com/buttons/default-orange.png" alt="Buy Me A Coffee" height="41" width="174"></a>
 
-
 # easy-openAI
 
 This is a way to turn easier creation of assistants using the GPT CHAT.
@@ -173,7 +172,7 @@ The return will be something like:
 ]
 ```
 
-### Here am entire code as example:
+### Here an entire code as example:
 
 ```ts
 import dotenv from 'dotenv';
