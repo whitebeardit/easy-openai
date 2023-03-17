@@ -32,16 +32,10 @@ jobs:
 
       - name: Release
         env:
-          NPM_TOKEN: ${{secrets.NPM_TOKEN}}
-          GITHUB_TOKEN: ${{ secrets.WB_GH_PACKAGE_TOKEN }}  
-        run: |
-          yarn release
-      
-      - name: Creating GH_TOKEN_CONFIG
-        env:
           GITHUB_TOKEN: ${{ secrets.WB_GH_PACKAGE_TOKEN }}
         run: |
           echo "//npm.pkg.github.com/:_authToken=${{ secrets.WB_EASY_OPENAI_PACKAGE_TOKEN }}" >>  .npmrc
+          yarn release
 
       - run: npm publish
         if: github.ref == 'refs/heads/main'
