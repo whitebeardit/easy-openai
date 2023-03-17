@@ -1,3 +1,10 @@
+## [1.0.14](https://github.com/whitebeardit/easy-openai/compare/v1.0.13...v1.0.14) (2023-03-17)
+
+
+### Bug Fixes
+
+* add npm token ([c0820f3](https://github.com/whitebeardit/easy-openai/commit/c0820f31d61ca7b62957b1f5df4816138ca5f710))
+
 ## [1.0.13](https://github.com/whitebeardit/easy-openai/compare/v1.0.12...v1.0.13) (2023-03-15)
 
 
