@@ -1,3 +1,10 @@
+## [1.0.16](https://github.com/whitebeardit/easy-openai/compare/v1.0.15...v1.0.16) (2023-03-17)
+
+
+### Bug Fixes
+
+* publish  npm ([9165249](https://github.com/whitebeardit/easy-openai/commit/91652492157b918e0c90e4644ecbf43ef769798b))
+
 ## [1.0.15](https://github.com/whitebeardit/easy-openai/compare/v1.0.14...v1.0.15) (2023-03-17)
 
 
