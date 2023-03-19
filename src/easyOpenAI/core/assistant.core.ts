@@ -64,7 +64,7 @@ export class Assistant {
     this.context.splice(0);
     this.context.push({
       role: 'system',
-      content: `You are a ${this.humor} assistant and your name is ${this.name}.`,
+      content: `Your name is ${this.name} and You have a ${this.humor} humor`,
       ownerId: 'Whitebeard',
     });
   }
