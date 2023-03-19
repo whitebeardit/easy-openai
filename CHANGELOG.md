@@ -1,3 +1,12 @@
+## [1.0.18](https://github.com/whitebeardit/easy-openai/compare/v1.0.17...v1.0.18) (2023-03-17)
+
+
+### Reverts
+
+* Revert "fix: add npm token" ([02fbc06](https://github.com/whitebeardit/easy-openai/commit/02fbc06bd6482674de8225ec2a470dae56af3470))
+* revert commit ([c73bbc2](https://github.com/whitebeardit/easy-openai/commit/c73bbc2dd856b7ffcb3a29e62dbfb03c2515fd7c))
+* revert commit ([61e719a](https://github.com/whitebeardit/easy-openai/commit/61e719a36f8f92b194043c86faf7c134a99837d4))
+
 ## [1.0.12](https://github.com/whitebeardit/easy-openai/compare/v1.0.11...v1.0.12) (2023-03-15)
 
 ### Bug Fixes
