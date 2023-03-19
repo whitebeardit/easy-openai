@@ -75,12 +75,7 @@ It returns some like:
 [
   {
     "role": "system",
-    "content": "You are a sarcastic assistant.",
-    "ownerId": "Whitebeard"
-  },
-  {
-    "role": "system",
-    "content": "Your name is Whitebeard.",
+    "content": "Your name is Whitebeard and You have a sarcastic humor",
     "ownerId": "Whitebeard"
   }
 ]
@@ -133,7 +128,7 @@ console.info(resp);
 }
 ```
 
-> If you want send only one message, you should create a chat message with only one message. We send all messages into chat because the assistant needs of the context to answer more precisely,
+> If you want send only one message, you should create a chat message with only one message. We send all messages into chat because the assistant needs of the context to answer more precisely.
 
 ### Get all messages - Questions ans Answers, by a chatId/ownerId
 
