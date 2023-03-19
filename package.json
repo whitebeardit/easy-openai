@@ -1,7 +1,10 @@
 {
   "name": "@whitebeardit/easy-openai",
   "description": "Api to make your life easier when thinking about the openAI",
-  "repository": "git@github.com:whitebeardit/easy-openai.git",
+  "repository": {
+    "type": "git",
+    "url": "git+ssh://git@github.com/whitebeardit/easy-openai.git"
+  },
   "scripts": {
     "test": "yarn run test:unit",
     "test:ci": "yarn test:unit && yarn run test:int",
@@ -20,7 +23,7 @@
     "prettier": "prettier --write src/**/*.ts",
     "lint": "eslint . --ext .ts"
   },
-  "author": "",
+  "author": "Almerindo Rehem",
   "license": "ISC",
   "dependencies": {
     "@types/bcryptjs": "^2.4.2",
@@ -81,7 +84,14 @@
     "/dist"
   ],
   "version": "1.0.12",
-  "publishConfig": {
-    "@whitebeardit:registry": "https://npm.pkg.github.com"
-  }
+  "bugs": {
+    "url": "https://github.com/whitebeardit/easy-openai/issues"
+  },
+  "homepage": "https://github.com/whitebeardit/easy-openai#readme",
+  "keywords": [
+    "Chat",
+    "GPT",
+    "Assistant",
+    "Whitebeard"
+  ]
 }

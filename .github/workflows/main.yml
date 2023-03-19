@@ -33,8 +33,11 @@ jobs:
       - name: Release
         env:
           GITHUB_TOKEN: ${{ secrets.WB_GH_PACKAGE_TOKEN }}
+          NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
         run: |
-          echo "//npm.pkg.github.com/:_authToken=${{ secrets.WB_EASY_OPENAI_PACKAGE_TOKEN }}" >>  .npmrc
+          npm set registry https://registry.npmjs.org/
+          echo "//registry.npmjs.org/:_authToken=$NPM_TOKEN" > .npmrc
+          # echo "//npm.pkg.github.com/:_authToken=${{ secrets.WB_EASY_OPENAI_PACKAGE_TOKEN }}" >>  .npmrc
           yarn release
 
       - run: npm publish
