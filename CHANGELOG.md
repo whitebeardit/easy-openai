@@ -1,3 +1,11 @@
+# [1.2.0](https://github.com/whitebeardit/easy-openai/compare/v1.1.0...v1.2.0) (2023-03-19)
+
+
+### Features
+
+* publishing in to npm registry ([723a526](https://github.com/whitebeardit/easy-openai/commit/723a52687fa4e1d27607d7f05e9d84124393b04c))
+* publishing in to npm registry ([4e9d426](https://github.com/whitebeardit/easy-openai/commit/4e9d4267dd0f946719fe4a11af8b70929b952ded))
+
 # [1.1.0](https://github.com/whitebeardit/easy-openai/compare/v1.0.18...v1.1.0) (2023-03-19)
 
 
