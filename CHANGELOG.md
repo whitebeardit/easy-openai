@@ -1,3 +1,11 @@
+# [1.1.0](https://github.com/whitebeardit/easy-openai/compare/v1.0.18...v1.1.0) (2023-03-19)
+
+
+### Features
+
+* publishing in to npm packages ([4874996](https://github.com/whitebeardit/easy-openai/commit/48749965721cda33ebbb2dbf9659e0c272283e87))
+* publishing in to npm packages ([00e2518](https://github.com/whitebeardit/easy-openai/commit/00e25185f527f4714d96b2eb58abcb02cd010149))
+
 ## [1.0.18](https://github.com/whitebeardit/easy-openai/compare/v1.0.17...v1.0.18) (2023-03-17)
 
 
