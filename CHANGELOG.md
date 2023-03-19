@@ -1,3 +1,10 @@
+## [1.2.1](https://github.com/whitebeardit/easy-openai/compare/v1.2.0...v1.2.1) (2023-03-19)
+
+
+### Bug Fixes
+
+* fix the humor and name of assistant ([a7e2f90](https://github.com/whitebeardit/easy-openai/commit/a7e2f9034accaf108e5514e89926e2b78ba4f4db))
+
 # [1.2.0](https://github.com/whitebeardit/easy-openai/compare/v1.1.0...v1.2.0) (2023-03-19)
 
 
