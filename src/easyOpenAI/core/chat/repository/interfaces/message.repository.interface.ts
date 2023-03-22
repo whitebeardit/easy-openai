@@ -1,4 +1,4 @@
-import { IChatCompletionMessage } from '../..';
+import { IChatCompletionMessage } from '../../..';
 
 export interface IMessageRepository {
   addMessage(params: IChatCompletionMessage): Promise<IChatCompletionMessage>;

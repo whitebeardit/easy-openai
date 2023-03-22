@@ -1,4 +1,4 @@
-export * from './assistant.core';
-export * from './chat.core';
+export * from './chat/assistant.core';
+export * from './chat/chat.core';
 export * from './openai.core';
-export * from './repository';
+export * from './chat/repository';

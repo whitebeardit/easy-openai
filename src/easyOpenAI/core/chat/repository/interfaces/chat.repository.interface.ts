@@ -1,4 +1,4 @@
-import { IChat } from '../..';
+import { IChat } from '../../..';
 
 export interface IChatRepository {
   addChat({ chat }: { chat: IChat }): Promise<IChat>;

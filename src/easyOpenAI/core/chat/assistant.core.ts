@@ -8,7 +8,7 @@ import {
   IChatRepository,
   IMessageRepository,
   OpenAI,
-} from '.';
+} from '..';
 
 export enum EHumor {
   'SARCASTIC' = 'sarcastic',
