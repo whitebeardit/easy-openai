@@ -8,6 +8,7 @@ export {
   OpenAI,
   IChatRepository,
   IMessageRepository,
+  IImageRepository,
 } from './easyOpenAI';
 
 export * as memoryRepository from './infrastructure';

@@ -1,7 +1,5 @@
 import { CreateImageRequestSizeEnum } from 'openai';
 import { OpenAI } from '../openai.core';
-import { writeFileSync } from 'fs';
-
 export class Image {
   private _description: string;
 
@@ -23,13 +21,6 @@ export class Image {
     this._description = value;
   }
 
-  private async saveImageToPng(imageJson: string) {
-    const imageData = imageJson.split(',')[1];
-    const buffer = Buffer.from(imageData, 'base64');
-    const fileName = `image-${Date.now()}.png`;
-    writeFileSync(fileName, buffer);
-  }
-
   public async generate({
     numberImages,
     size = '256x256',
@@ -41,7 +32,7 @@ export class Image {
       prompt: this.description,
       n: numberImages,
       size,
-      response_format: 'url',
+      response_format: 'b64_json',
     });
 
     return result.data;

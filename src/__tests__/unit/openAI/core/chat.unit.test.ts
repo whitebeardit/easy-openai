@@ -1,4 +1,4 @@
-import { MessageRepository } from '../../../../infrastructure/message.repository';
+import { MessageRepository } from '../../../../infrastructure';
 import { Chat } from '../../../../';
 import { randomUUID } from 'crypto';
 

@@ -1,5 +1,4 @@
-import { ChatRepository } from '../../../../infrastructure/chat.repository';
-import { MessageRepository } from '../../../../infrastructure/message.repository';
+import { ChatRepository, MessageRepository } from '../../../../infrastructure';
 import { Assistant, EHumor, EModel, Chat } from '../../../..';
 import { createChatCompletionMock } from './createChatCompletion.mock';
 

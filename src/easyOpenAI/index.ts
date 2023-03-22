@@ -7,5 +7,6 @@ export {
   IChatCompletionMessageBase,
   IChatRepository,
   IMessageRepository,
+  IImageRepository,
   OpenAI,
 } from './core';

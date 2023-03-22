@@ -1,4 +1,4 @@
-import { IChatCompletionMessage, IMessageRepository } from '..';
+import { IChatCompletionMessage, IMessageRepository } from '../../';
 
 export class MessageRepository implements IMessageRepository {
   //[ ]: Cache Rotation - Pegar da memória, e se não tiver na memória, carregar do repositório. Se atingiu o limite na memória, substituir a menos usada.
