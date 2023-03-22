@@ -29,7 +29,18 @@ const main = async () => {
     role: 'user',
     chatId: String(chatCreated?.id),
   };
-  await whitebeardAssistant.addMessage(message);
+  const m = await whitebeardAssistant.addMessage(message);
+  console.info({ m });
+
+  //Create messages and add into the chat created
+  const messageC: IChatCompletionMessage = {
+    content: '/create image: um gato de botas',
+    ownerId: String(chatCreated?.ownerId),
+    role: 'user',
+    chatId: String(chatCreated?.id),
+  };
+  const mc = await whitebeardAssistant.addMessage(messageC);
+  console.info({ mc });
 
   // Send the chat (with all messages) to the ChatGPT
   const resp = await whitebeardAssistant.sendChat(String(chatCreated?.id));

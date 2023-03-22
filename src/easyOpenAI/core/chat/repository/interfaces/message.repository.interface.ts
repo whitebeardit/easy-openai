@@ -5,6 +5,7 @@ export interface IMessageRepository {
   getMessages(
     ownerId: string,
     chatId: string,
+    isCommand: boolean,
     params?: {
       skip: number;
       limit: number;

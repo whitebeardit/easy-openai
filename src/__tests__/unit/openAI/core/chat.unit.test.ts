@@ -24,23 +24,26 @@ describe('Chat messages', () => {
       role: 'user',
       ownerId,
       chatId,
+      isCommand: false,
     });
     messageRepository.addMessage({
       content: 'content 02',
       role: 'user',
       ownerId,
       chatId,
+      isCommand: false,
     });
     messageRepository.addMessage({
       content: 'content 03',
       role: 'user',
       ownerId,
       chatId,
+      isCommand: false,
     });
 
-    expect((await messageRepository.getMessages(ownerId, chatId)).length).toBe(
-      3,
-    );
+    expect(
+      (await messageRepository.getMessages(ownerId, chatId, false)).length,
+    ).toBe(3);
   });
 
   it('Should be possible get messages paginated', async () => {
@@ -59,45 +62,78 @@ describe('Chat messages', () => {
       role: 'user',
       ownerId,
       chatId,
+      isCommand: false,
     });
     messageRepository.addMessage({
       content: 'content 02',
       role: 'user',
       ownerId,
       chatId,
+      isCommand: false,
     });
     messageRepository.addMessage({
       content: 'content 03',
       role: 'user',
       ownerId,
       chatId,
+      isCommand: false,
     });
 
-    const messages = await messageRepository.getMessages(ownerId, chatId, {
-      skip: 0,
-      limit: 1,
-    });
-    const messages1 = await messageRepository.getMessages(ownerId, chatId, {
-      skip: 1,
-      limit: 1,
-    });
-    const messages2 = await messageRepository.getMessages(ownerId, chatId, {
-      skip: 2,
-      limit: 1,
-    });
-    const messages3 = await messageRepository.getMessages(ownerId, chatId, {
-      skip: 3,
-      limit: 1,
-    });
+    const messages = await messageRepository.getMessages(
+      ownerId,
+      chatId,
+      false,
+      {
+        skip: 0,
+        limit: 1,
+      },
+    );
+    const messages1 = await messageRepository.getMessages(
+      ownerId,
+      chatId,
+      false,
+      {
+        skip: 1,
+        limit: 1,
+      },
+    );
+    const messages2 = await messageRepository.getMessages(
+      ownerId,
+      chatId,
+      false,
+      {
+        skip: 2,
+        limit: 1,
+      },
+    );
+    const messages3 = await messageRepository.getMessages(
+      ownerId,
+      chatId,
+      false,
+      {
+        skip: 3,
+        limit: 1,
+      },
+    );
 
-    const messages4 = await messageRepository.getMessages(ownerId, chatId, {
-      skip: 0,
-      limit: 100,
-    });
-    const messages5 = await messageRepository.getMessages(ownerId, chatId, {
-      skip: 1,
-      limit: 100,
-    });
+    const messages4 = await messageRepository.getMessages(
+      ownerId,
+      chatId,
+      false,
+      {
+        skip: 0,
+        limit: 100,
+      },
+    );
+    const messages5 = await messageRepository.getMessages(
+      ownerId,
+      chatId,
+      false,
+      {
+        skip: 1,
+        limit: 100,
+      },
+    );
 
     expect(messages.length).toBe(1);
     expect(messages[0].content).toBe('content 01');

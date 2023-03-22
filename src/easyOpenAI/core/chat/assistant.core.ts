@@ -22,7 +22,24 @@ export enum EModel {
   'TEXT-DAVINCI-003' = 'text-davinci-003',
 }
 
+export enum ECommand {
+  'CREATE IMAGE',
+  'UPDATE_IMAGE',
+}
+
+export interface ICommand {
+  command: ECommand;
+  pattern: RegExp;
+}
+
 export class Assistant {
+  private commands: ICommand[] = [
+    {
+      command: ECommand['CREATE IMAGE'],
+      pattern: /^\/create image:/,
+    },
+  ];
+
   private _id: string = randomUUID();
 
   private _name = 'Whitebeard';
@@ -140,6 +157,7 @@ export class Assistant {
         object: answer.object,
         ownerId: chat.ownerId,
         chatId: chat.id,
+        isCommand: false,
       };
       return answerMessage;
     } catch (error: any) {
@@ -153,6 +171,7 @@ export class Assistant {
     const chatMessages = await this._messageRepository.getMessages(
       chat.ownerId,
       chat.id,
+      false,
     );
     const messages = [...this.context, ...chatMessages];
     const messageToSend = messages.map((m) => {
@@ -161,12 +180,26 @@ export class Assistant {
     return messageToSend;
   }
 
+  private detectCommand(input: string): ICommand | undefined {
+    for (let index = 0; index < this.commands.length; index++) {
+      const command = this.commands[index];
+      if (command.pattern.test(input)) return command;
+    }
+    return;
+  }
+
   async addMessage(message: IChatCompletionMessage) {
+    message.isCommand = !!this.detectCommand(message.content);
+    console.info({ assistantMessage: message });
     return this._messageRepository.addMessage(message);
   }
 
   async getMessages({ chatId, ownerId }: { ownerId: string; chatId: string }) {
-    const messages = await this._messageRepository.getMessages(ownerId, chatId);
+    const messages = await this._messageRepository.getMessages(
+      ownerId,
+      chatId,
+      false,
+    );
     return messages;
   }
 

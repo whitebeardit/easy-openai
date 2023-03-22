@@ -5,9 +5,9 @@ import { Image } from '../easyOpenAI/core/image/image';
 import { ImageRepository } from '../infrastructure/image/image.repository';
 const main = async () => {
   const i = new Image({
-    description: 'simbolo de psicologia na areia da praia',
+    description: 'Símbolo PSI desenhado na areia',
   });
-  const resp = await i.generate({ numberImages: 1, size: '256x256' });
+  const resp = await i.generate({ numberImages: 4, size: '256x256' });
   const images = resp.data;
   const imgRepository = new ImageRepository('./');
 

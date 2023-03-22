@@ -16,6 +16,7 @@ export interface IChatCompletionMessage extends IChatCompletionMessageBase {
   finish_reason?: string;
   object?: string;
   created?: number;
+  isCommand?: boolean;
 }
 
 export interface IChat {
