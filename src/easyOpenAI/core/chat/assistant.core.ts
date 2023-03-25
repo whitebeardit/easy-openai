@@ -1,5 +1,9 @@
 import { randomUUID } from 'crypto';
-import { CreateChatCompletionResponse } from 'openai';
+import {
+  CreateChatCompletionResponse,
+  CreateImageRequestResponseFormatEnum,
+  CreateImageRequestSizeEnum,
+} from 'openai';
 import { Logger } from 'traceability';
 import {
   IChat,
@@ -9,6 +13,7 @@ import {
   IMessageRepository,
   OpenAI,
 } from '..';
+import { ImageRepository } from '../../../infrastructure';
 
 export enum EHumor {
   'SARCASTIC' = 'sarcastic',
@@ -32,14 +37,20 @@ export interface ICommand {
   pattern: RegExp;
 }
 
+export interface IAssistant {
+  repositories: {
+    chatRepository: IChatRepository;
+    messageRepository: IMessageRepository;
+    imageRepository: ImageRepository;
+  };
+  params?: {
+    name?: string;
+    humor?: EHumor;
+    model?: EModel;
+    id?: string;
+  };
+}
 export class Assistant {
-  private commands: ICommand[] = [
-    {
-      command: ECommand['CREATE IMAGE'],
-      pattern: /^\/create image:/,
-    },
-  ];
-
   private _id: string = randomUUID();
 
   private _name = 'Whitebeard';
@@ -56,24 +67,18 @@ export class Assistant {
 
   _messageRepository: IMessageRepository;
 
-  constructor(
-    chatRepository: IChatRepository,
-    messageRepository: IMessageRepository,
-    params?: {
-      name?: string;
-      humor?: EHumor;
-      model?: EModel;
-      id?: string;
-    },
-  ) {
+  _imageRepository: ImageRepository;
+
+  constructor({ repositories, params }: IAssistant) {
     if (params) {
       this.name = params.name || this.name;
       this.humor = params.humor || this.humor;
       this.id = params.id || this.id;
       this.model = params.model || this.model;
     }
-    this._chatRepository = chatRepository;
-    this._messageRepository = messageRepository;
+    this._chatRepository = repositories.chatRepository;
+    this._messageRepository = repositories.messageRepository;
+    this._imageRepository = repositories.imageRepository;
     this.setup();
   }
 
@@ -157,7 +162,6 @@ export class Assistant {
         object: answer.object,
         ownerId: chat.ownerId,
         chatId: chat.id,
-        isCommand: false,
       };
       return answerMessage;
     } catch (error: any) {
@@ -171,7 +175,6 @@ export class Assistant {
     const chatMessages = await this._messageRepository.getMessages(
       chat.ownerId,
       chat.id,
-      false,
     );
     const messages = [...this.context, ...chatMessages];
     const messageToSend = messages.map((m) => {
@@ -180,26 +183,12 @@ export class Assistant {
     return messageToSend;
   }
 
-  private detectCommand(input: string): ICommand | undefined {
-    for (let index = 0; index < this.commands.length; index++) {
-      const command = this.commands[index];
-      if (command.pattern.test(input)) return command;
-    }
-    return;
-  }
-
   async addMessage(message: IChatCompletionMessage) {
-    message.isCommand = !!this.detectCommand(message.content);
-    console.info({ assistantMessage: message });
     return this._messageRepository.addMessage(message);
   }
 
   async getMessages({ chatId, ownerId }: { ownerId: string; chatId: string }) {
-    const messages = await this._messageRepository.getMessages(
-      ownerId,
-      chatId,
-      false,
-    );
+    const messages = await this._messageRepository.getMessages(ownerId, chatId);
     return messages;
   }
 
@@ -211,6 +200,7 @@ export class Assistant {
       throw error;
     }
 
+    //TODO: Só enviar se existir uma nova mensagem, não comando, que não foi enviada.
     Logger.debug(`Sending messages from chat ${chatId}`);
     const messageToSend = await this.prepareMessageToSend(chat);
 
@@ -229,5 +219,47 @@ export class Assistant {
     );
 
     return answerMessage;
+  }
+
+  async createImages({
+    numberImages = 1,
+    size = '256x256',
+    description,
+  }: {
+    numberImages?: number;
+    size?: CreateImageRequestSizeEnum;
+    description: string;
+  }) {
+    const response_format: CreateImageRequestResponseFormatEnum = 'b64_json';
+
+    try {
+      const result = await this.getOpenAIApi().createImage({
+        prompt: description,
+        n: numberImages,
+        size,
+        response_format,
+      });
+
+      const images = result.data.data;
+      const createdAt = result.data.created;
+
+      for (let index = 0; index < images.length; index++) {
+        const image = images[index];
+        if (image.b64_json)
+          this._imageRepository.addImage({
+            description,
+            b64Data: image.b64_json,
+            id: randomUUID(),
+            createdAt,
+          });
+      }
+      return true;
+    } catch (error: any) {
+      Logger.error(error.message, {
+        eventName: 'createImages',
+        eventData: { numberImages, size, description },
+      });
+      return false;
+    }
   }
 }

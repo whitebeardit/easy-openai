@@ -2,14 +2,35 @@ import dotenv from 'dotenv';
 dotenv.config({ path: './environments/.env' });
 
 import { randomUUID } from 'crypto';
-import { Assistant, Chat, IChatCompletionMessage, memoryRepository } from '../';
+import {
+  Assistant,
+  Chat,
+  EHumor,
+  EModel,
+  IChatCompletionMessage,
+  memoryRepository,
+} from '../';
+import { ImageRepository } from '../infrastructure';
 const { ChatRepository, MessageRepository } = memoryRepository;
 
 const main = async () => {
   const chatRepository = new ChatRepository();
   const messageRepository = new MessageRepository();
+  const imageRepository = new ImageRepository('./');
 
-  const whitebeardAssistant = new Assistant(chatRepository, messageRepository);
+  const whitebeardAssistant = new Assistant({
+    repositories: {
+      chatRepository,
+      messageRepository,
+      imageRepository,
+    },
+    params: {
+      humor: EHumor.SARCASTIC,
+      model: EModel['GPT-3.5-TURBO'],
+      name: 'Whitebeard',
+      id: randomUUID(),
+    },
+  });
   console.info(whitebeardAssistant.context);
 
   // Create a new Chat and add it on the assistant

@@ -1,8 +1,17 @@
 import { writeFileSync, readFileSync } from 'fs';
 import { IImageRepository } from '../../easyOpenAI/core/image/repository/interfaces/image.repository.interface';
 
+export interface IImage {
+  b64Data: string;
+  id: string;
+  description: string;
+  createdAt: number;
+}
+
 export class ImageRepository implements IImageRepository {
   private _baseDir;
+
+  private images: IImage[] = [];
 
   public get baseDir() {
     return this._baseDir;
@@ -16,6 +25,16 @@ export class ImageRepository implements IImageRepository {
     this._baseDir = baseDir;
   }
 
+  addImage({ id, b64Data, description, createdAt }: IImage) {
+    const image: IImage = {
+      id,
+      b64Data,
+      description,
+      createdAt,
+    };
+    this.images.push(image);
+  }
+
   save(b64Data: string): Promise<string> {
     const buffer = Buffer.from(b64Data, 'base64');
     const fileName = `${this.baseDir}/image-${Date.now()}.png`;
@@ -23,7 +42,7 @@ export class ImageRepository implements IImageRepository {
     return Promise.resolve(fileName);
   }
 
-  _readImgBase64(imgPath: string): string {
+  private _readImgBase64(imgPath: string): string {
     const imgFile = readFileSync(imgPath);
     const img = Buffer.from(imgFile).toString('base64');
     return img;

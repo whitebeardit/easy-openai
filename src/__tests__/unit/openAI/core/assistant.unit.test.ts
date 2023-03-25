@@ -1,4 +1,8 @@
-import { ChatRepository, MessageRepository } from '../../../../infrastructure';
+import {
+  ChatRepository,
+  ImageRepository,
+  MessageRepository,
+} from '../../../../infrastructure';
 import { Assistant, EHumor, EModel, Chat } from '../../../..';
 import { createChatCompletionMock } from './createChatCompletion.mock';
 
@@ -14,8 +18,15 @@ describe('Assistant', () => {
   it('Should be possible to create an Assistant', async () => {
     const chatRepository = new ChatRepository();
     const messageRepository = new MessageRepository();
+    const imageRepository = new ImageRepository('./');
 
-    const assistant = new Assistant(chatRepository, messageRepository);
+    const assistant = new Assistant({
+      repositories: {
+        chatRepository,
+        messageRepository,
+        imageRepository,
+      },
+    });
     expect(assistant.context.length).toBe(1);
     expect(assistant.humor).toBe(EHumor.SARCASTIC);
     expect(assistant.model).toBe(EModel['GPT-3.5-TURBO']);
@@ -28,8 +39,15 @@ describe('Assistant', () => {
   it('Should be possible to send message to GPT and store the response into the right chat messages', async () => {
     const chatRepository = new ChatRepository();
     const messageRepository = new MessageRepository();
+    const imageRepository = new ImageRepository('./');
 
-    const assistant = new Assistant(chatRepository, messageRepository);
+    const assistant = new Assistant({
+      repositories: {
+        chatRepository,
+        messageRepository,
+        imageRepository,
+      },
+    });
     const openAIApi = assistant.getOpenAIApi();
 
     (jest.spyOn(openAIApi, 'createChatCompletion') as any).mockImplementation(
@@ -90,6 +108,8 @@ describe('Assistant', () => {
   it('Should be possible add different chats', async () => {
     const chatRepository = new ChatRepository();
     const messageRepository = new MessageRepository();
+    const imageRepository = new ImageRepository('./');
+
     const chat = new Chat({
       _id: 'My_Chat_ID_01',
       ownerId: 'Almera',
@@ -104,7 +124,13 @@ describe('Assistant', () => {
       description: 'My Description Andre',
     });
 
-    const assistant = new Assistant(chatRepository, messageRepository);
+    const assistant = new Assistant({
+      repositories: {
+        chatRepository,
+        messageRepository,
+        imageRepository,
+      },
+    });
     assistant.addChat({ chat });
     assistant.addChat({ chat: chat2 });
 
@@ -120,6 +146,8 @@ describe('Assistant', () => {
   it('Should be possible get chats paginated', async () => {
     const chatRepository = new ChatRepository();
     const messageRepository = new MessageRepository();
+    const imageRepository = new ImageRepository('./');
+
     const chat = new Chat({
       _id: 'My_Chat_ID_01',
       ownerId: 'Almera',
@@ -148,7 +176,13 @@ describe('Assistant', () => {
       description: 'My Description Andre 02',
     });
 
-    const assistant = new Assistant(chatRepository, messageRepository);
+    const assistant = new Assistant({
+      repositories: {
+        chatRepository,
+        messageRepository,
+        imageRepository,
+      },
+    });
     assistant.addChat({ chat });
     assistant.addChat({ chat: chat2 });
     assistant.addChat({ chat: otherUserChat });

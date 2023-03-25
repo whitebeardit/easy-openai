@@ -7,7 +7,7 @@ const main = async () => {
   const i = new Image({
     description: 'Símbolo PSI desenhado na areia',
   });
-  const resp = await i.generate({ numberImages: 4, size: '256x256' });
+  const resp = await i.generate({});
   const images = resp.data;
   const imgRepository = new ImageRepository('./');
 

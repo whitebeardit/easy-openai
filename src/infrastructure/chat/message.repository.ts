@@ -1,10 +1,7 @@
 import { IChatCompletionMessage, IMessageRepository } from '../../';
 
 export class MessageRepository implements IMessageRepository {
-  // getMessages(ownerId: string, chatId: string, isCommand: boolean, params?: { skip: number; limit: number; } | undefined): Promise<IChatCompletionMessage[]> {
-  //   throw new Error('Method not implemented.');
-  // }
-  //[ ]: Cache Rotation - Pegar da memória, e se não tiver na memória, carregar do repositório. Se atingiu o limite na memória, substituir a menos usada.
+  //[ ]:Implementar Cache Rotation - Pegar da memória, e se não tiver na memória, carregar do repositório. Se atingiu o limite na memória, substituir a menos usada.
 
   _messages: IChatCompletionMessage[] = [];
 
@@ -12,20 +9,14 @@ export class MessageRepository implements IMessageRepository {
   getMessages(
     ownerId: string,
     chatId: string,
-    isCommand: boolean,
     params?: {
       skip: number;
       limit: number;
     },
   ): Promise<IChatCompletionMessage[]> {
-    console.info({ MYMSG: this._messages, ownerId, chatId, isCommand });
     let result = this._messages.filter(
-      (message) =>
-        message.ownerId === ownerId &&
-        message.chatId === chatId &&
-        message.isCommand === isCommand,
+      (message) => message.ownerId === ownerId && message.chatId === chatId,
     );
-    console.info({ result });
 
     if (params) {
       if (params.skip < 0) {
@@ -45,6 +36,7 @@ export class MessageRepository implements IMessageRepository {
         result = result.slice(params.skip, params.skip + params.limit);
       }
     }
+    console.info({ result });
     return Promise.resolve(result);
   }
 
