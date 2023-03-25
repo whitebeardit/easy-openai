@@ -14,6 +14,7 @@ import {
   OpenAI,
 } from '..';
 import { ImageRepository } from '../../../infrastructure';
+import { IImageMetadata } from '../../../infrastructure/image';
 
 export enum EHumor {
   'SARCASTIC' = 'sarcastic',
@@ -229,7 +230,7 @@ export class Assistant {
     numberImages?: number;
     size?: CreateImageRequestSizeEnum;
     description: string;
-  }) {
+  }): Promise<IImageMetadata[] | void> {
     const response_format: CreateImageRequestResponseFormatEnum = 'b64_json';
 
     try {
@@ -243,23 +244,28 @@ export class Assistant {
       const images = result.data.data;
       const createdAt = result.data.created;
 
+      const imgMetadata: IImageMetadata[] = [];
+
       for (let index = 0; index < images.length; index++) {
-        const image = images[index];
-        if (image.b64_json)
-          this._imageRepository.addImage({
+        const imageData = images[index];
+        if (imageData.b64_json) {
+          const img = {
             description,
-            b64Data: image.b64_json,
+            b64Data: imageData.b64_json,
             id: randomUUID(),
             createdAt,
-          });
+          };
+          imgMetadata.push({ description, id: img.id, createdAt });
+          this._imageRepository.addImage(img);
+        }
       }
-      return true;
+      return imgMetadata;
     } catch (error: any) {
       Logger.error(error.message, {
         eventName: 'createImages',
         eventData: { numberImages, size, description },
       });
-      return false;
+      return;
     }
   }
 }

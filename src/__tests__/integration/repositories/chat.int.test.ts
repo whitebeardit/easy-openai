@@ -1,6 +1,6 @@
-import { MessageRepository } from '../../../../infrastructure';
-import { Chat } from '../../../../';
+import { Chat } from '../../..';
 import { randomUUID } from 'crypto';
+import { MessageRepository } from '../../../infrastructure';
 
 describe('Chat messages', () => {
   beforeAll(async () => {});

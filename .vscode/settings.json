@@ -41,5 +41,7 @@
     "UNCAUGHTEXCEPTION",
     "whitebeard",
     "whitebeardit"
-  ]
+  ],
+  "jest.jestCommandLine": "npx jest --runInBand --forceExit --config ./jest/jest.int-config.js --detectOpenHandles",
+  "jestrunner.configPath": "./jest/jest.int-config.js"
 }

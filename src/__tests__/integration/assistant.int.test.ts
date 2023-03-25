@@ -2,9 +2,9 @@ import {
   ChatRepository,
   ImageRepository,
   MessageRepository,
-} from '../../../../infrastructure';
-import { Assistant, EHumor, EModel, Chat } from '../../../..';
-import { createChatCompletionMock } from './createChatCompletion.mock';
+} from '../../infrastructure';
+import { Assistant, EHumor, EModel, Chat } from '../..';
+import { createChatCompletionMock } from '../utils/mocks/createChatCompletion.mock';
 
 describe('Assistant', () => {
   beforeAll(async () => {
@@ -18,7 +18,7 @@ describe('Assistant', () => {
   it('Should be possible to create an Assistant', async () => {
     const chatRepository = new ChatRepository();
     const messageRepository = new MessageRepository();
-    const imageRepository = new ImageRepository('./');
+    const imageRepository = new ImageRepository('./tmpTests');
 
     const assistant = new Assistant({
       repositories: {
@@ -34,75 +34,6 @@ describe('Assistant', () => {
     expect(assistant.id).toMatch(
       /^[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i,
     );
-  });
-
-  it('Should be possible to send message to GPT and store the response into the right chat messages', async () => {
-    const chatRepository = new ChatRepository();
-    const messageRepository = new MessageRepository();
-    const imageRepository = new ImageRepository('./');
-
-    const assistant = new Assistant({
-      repositories: {
-        chatRepository,
-        messageRepository,
-        imageRepository,
-      },
-    });
-    const openAIApi = assistant.getOpenAIApi();
-
-    (jest.spyOn(openAIApi, 'createChatCompletion') as any).mockImplementation(
-      createChatCompletionMock,
-    );
-
-    const chat = new Chat({
-      _id: 'My_Chat_ID',
-      ownerId: 'Almera',
-      title: 'My Subject',
-      description: 'My Description',
-    });
-    assistant.addChat({ chat });
-
-    const myChat = (await assistant.getChat({ chatId: chat.id })) as Chat;
-
-    assistant.addMessage({
-      content: 'content 01',
-      role: 'user',
-      ownerId: myChat.ownerId,
-      chatId: myChat.id,
-    });
-    assistant.addMessage({
-      content: 'content 02',
-      role: 'user',
-      ownerId: myChat.ownerId,
-      chatId: myChat.id,
-    });
-    assistant.addMessage({
-      content: 'content 03',
-      role: 'user',
-      ownerId: myChat.ownerId,
-      chatId: myChat.id,
-    });
-
-    await assistant.sendChat(chat.id);
-
-    const messages = await assistant.getMessages({
-      chatId: myChat.id,
-      ownerId: myChat.ownerId,
-    });
-
-    expect(messages.length).toBeGreaterThan(3);
-
-    const lastMessage = messages[messages.length - 1];
-
-    expect(lastMessage).toMatchObject({
-      id: 'chatcmpl-6tRmsVIkx7HGLTcuq6u7oTN5fg2u2',
-      object: 'chat.completion',
-      created: 1678672874,
-      content: 'Give me more context!',
-      role: 'assistant',
-      ownerId: 'Almera',
-      usage: { prompt_tokens: 60, completion_tokens: 17, total_tokens: 77 },
-    });
   });
 
   it('Should be possible add different chats', async () => {

@@ -16,7 +16,7 @@ const { ChatRepository, MessageRepository } = memoryRepository;
 const main = async () => {
   const chatRepository = new ChatRepository();
   const messageRepository = new MessageRepository();
-  const imageRepository = new ImageRepository('./');
+  const imageRepository = new ImageRepository('./tmp');
 
   const whitebeardAssistant = new Assistant({
     repositories: {
@@ -53,19 +53,16 @@ const main = async () => {
   const m = await whitebeardAssistant.addMessage(message);
   console.info({ m });
 
-  //Create messages and add into the chat created
-  const messageC: IChatCompletionMessage = {
-    content: '/create image: um gato de botas',
-    ownerId: String(chatCreated?.ownerId),
-    role: 'user',
-    chatId: String(chatCreated?.id),
-  };
-  const mc = await whitebeardAssistant.addMessage(messageC);
-  console.info({ mc });
-
   // Send the chat (with all messages) to the ChatGPT
   const resp = await whitebeardAssistant.sendChat(String(chatCreated?.id));
   console.info(resp);
+
+  const img = await whitebeardAssistant.createImages({
+    description: 'The master Yoda in the beach',
+    numberImages: 4,
+  });
+
+  console.info(img);
 
   // All dialog will be stored in the chat
   const chatMessages = await whitebeardAssistant.getMessages({
