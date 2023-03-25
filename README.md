@@ -4,32 +4,14 @@
 
 This is a way to turn easier creation of assistants using the GPT CHAT.
 
+## To see an easy hello world look at [Easy-OpenAi for Dummies :-)](https://github.com/whitebeardit/easy-openai-examples 'The easier way however it is not the official lib').
+
 # Install Guide
 
 ## Install using yarn
 
 ```bash
 yarn add @whitebeardit/easy-openai
-```
-
-## Problems known
-
-If you face the following error when compiling your project:
-
-```bash
-TS2304: Cannot find name 'File'.
-```
-
-Edit your `tsconfig.json` , and in `compileOptions` set the property `"skipLibCheck"` `true` as a following:
-
-```json
-{
-  "compilerOptions": {
-    //  ...
-    "skipLibCheck": true
-  }
-  // ...
-}
 ```
 
 # How to use
@@ -218,8 +200,28 @@ const main = async () => {
 main();
 ```
 
+## Problems known
+
+If you face the following error when compiling your project:
+
+```bash
+TS2304: Cannot find name 'File'.
+```
+
+Edit your `tsconfig.json` , and in `compileOptions` set the property `"skipLibCheck"` `true` as a following:
+
+```json
+{
+  "compilerOptions": {
+    //  ...
+    "skipLibCheck": true
+  }
+  // ...
+}
+```
+
 # Here you can find a full project as example:
 
-An easy hello world [OpenAi for Dummies :-)](https://github.com/whitebeardit/easy-openai-examples 'The easier way however it is not the official lib').
+## An easy hello world [OpenAi for Dummies :-)](https://github.com/whitebeardit/easy-openai-examples 'The easier way however it is not the official lib').
 
 <a href="https://www.buymeacoffee.com/almerindo" target="_blank"><img src="https://cdn.buymeacoffee.com/buttons/default-orange.png" alt="Buy Me A Coffee" height="41" width="174"></a>
