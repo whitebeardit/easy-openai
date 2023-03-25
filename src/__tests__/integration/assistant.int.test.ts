@@ -4,7 +4,6 @@ import {
   MessageRepository,
 } from '../../infrastructure';
 import { Assistant, EHumor, EModel, Chat } from '../..';
-import { createChatCompletionMock } from '../utils/mocks/createChatCompletion.mock';
 
 describe('Assistant', () => {
   beforeAll(async () => {
