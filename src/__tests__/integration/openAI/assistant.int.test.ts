@@ -75,7 +75,7 @@ describe('Assistant', () => {
       chatId: myChat.id,
     });
 
-    await assistant.sendChat(chat.id);
+    await assistant.sendMessages({ chatId: chat.id });
 
     const messages = await assistant.getMessages({
       chatId: myChat.id,
@@ -98,11 +98,19 @@ describe('Assistant', () => {
   });
 
   it('Should be possible create an Image', async () => {
+    const chat = new Chat({
+      _id: 'My_Chat_ID',
+      ownerId: 'Whitebeard',
+      title: 'My Subject',
+      description: 'My Description',
+    });
+    assistant.addChat({ chat });
+
     // Generating an image based on the given description
     const imgMetadata = (await assistant.createImages({
       description: 'The master Yoda with white beard in the beach ',
       numberImages: 1,
-      chatId: 'chat001',
+      chatId: 'My_Chat_ID',
       ownerId: 'Whitebeard',
     })) as IImageMetadata[];
 

@@ -187,6 +187,12 @@ export class Assistant {
   }
 
   async addMessage(message: IChatCompletionMessage) {
+    const chat = await this.getChat({ chatId: message.chatId });
+    if (!chat) {
+      const error = new Error('Chat was not found!');
+      Logger.error(error.message);
+      throw error;
+    }
     return this._messageRepository.addMessage(message);
   }
 
@@ -195,7 +201,11 @@ export class Assistant {
     return messages;
   }
 
-  async sendChat(chatId: string): Promise<IChatCompletionMessage | undefined> {
+  async sendMessages({
+    chatId,
+  }: {
+    chatId: string;
+  }): Promise<IChatCompletionMessage | undefined> {
     const chat = await this.getChat({ chatId });
     if (!chat) {
       const error = new Error('Chat was not found!');
@@ -224,6 +234,8 @@ export class Assistant {
     return answerMessage;
   }
 
+  //TODO: Criar método addImage que somente adiciona uma descrição da imagem sem enviar
+  //TODO: Criar método sendImages que envia as imagens não enviadas do chat e adiciona como resposta na ImagemChat
   async createImages({
     numberImages = 1,
     size = '256x256',
@@ -237,6 +249,13 @@ export class Assistant {
     ownerId: string;
     chatId: string;
   }): Promise<IImageMetadata[] | void> {
+    const chat = await this.getChat({ chatId });
+    if (!chat) {
+      const error = new Error('Chat was not found!');
+      Logger.error(error.message);
+      throw error;
+    }
+
     const response_format: CreateImageRequestResponseFormatEnum = 'b64_json';
 
     try {

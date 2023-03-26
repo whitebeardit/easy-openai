@@ -57,7 +57,9 @@ const main = async () => {
   console.info({ m });
 
   // Send the chat (with all messages) to the ChatGPT
-  const resp = await whitebeardAssistant.sendChat(String(chatCreated?.id));
+  const resp = await whitebeardAssistant.sendMessages({
+    chatId: String(chatCreated?.id),
+  });
   console.info(resp);
 
   // All dialog will be stored in the chat
