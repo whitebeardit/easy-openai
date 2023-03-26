@@ -1,3 +1,4 @@
+import path from 'path';
 import { Assistant, Chat } from '../../../easyOpenAI';
 import {
   ChatRepository,
@@ -9,10 +10,10 @@ import {
   createChatCompletionMock,
   createImageMock,
 } from '../../utils/mocks/createChatCompletion.mock';
-import { deleteFiles } from '../../utils/util';
+import { deleteDir, deleteFiles } from '../../utils/util';
 
 describe('Assistant', () => {
-  const testBaseDir = './tmpTests';
+  const testBaseDir = path.join(__dirname, '/tmp', 'tests');
   const chatRepository = new ChatRepository();
   const messageRepository = new MessageRepository();
   const imageRepository = new ImageRepository(testBaseDir);
@@ -39,6 +40,7 @@ describe('Assistant', () => {
 
   afterAll(async () => {
     await deleteFiles(testBaseDir);
+    await deleteDir(path.join(__dirname, '/tmp'));
     jest.clearAllMocks();
   });
 

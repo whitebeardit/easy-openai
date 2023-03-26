@@ -1,20 +1,21 @@
 import { randomUUID } from 'crypto';
 import path from 'path';
 import { ImageRepository } from '../../../infrastructure';
-import { createDir, deleteFiles } from '../../utils/util';
+import { createDir, deleteDir, deleteFiles } from '../../utils/util';
 
 describe('Image Repository', () => {
   const testBaseDir = path.join(__dirname, '/tmp', 'tests');
   const imageRepository = new ImageRepository(testBaseDir);
 
   beforeAll(async () => {
-    await createDir(testBaseDir);
     await deleteFiles(testBaseDir);
+    await createDir(testBaseDir);
     jest.clearAllMocks();
   });
 
   afterAll(async () => {
     await deleteFiles(testBaseDir);
+    await deleteDir(path.join(__dirname, '/tmp'));
     jest.clearAllMocks();
   });
 

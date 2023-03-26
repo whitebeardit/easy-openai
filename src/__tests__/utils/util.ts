@@ -3,8 +3,12 @@ import path from 'node:path';
 import rimraf from 'rimraf';
 
 export const deleteFiles = async (directory: string) => {
-  for (const file of await fs.readdir(directory)) {
-    await fs.unlink(path.join(directory, file));
+  try {
+    for (const file of await fs.readdir(directory)) {
+      await fs.unlink(path.join(directory, file));
+    }
+  } catch (error) {
+    console.error({ error });
   }
 };
 
@@ -13,5 +17,6 @@ export const createDir = async (directory: string) => {
 };
 
 export const deleteDir = async (directory: string) => {
+  console.info({ directory });
   rimraf.sync(directory);
 };
