@@ -234,6 +234,8 @@ export class Assistant {
     return answerMessage;
   }
 
+  //TODO: criar metodo getChatHistory retornando todas as mensagens/respostas e imagens/respostas do Chat
+
   //TODO: Criar método addImage que somente adiciona uma descrição da imagem sem enviar
   //TODO: Criar método sendImages que envia as imagens não enviadas do chat e adiciona como resposta na ImagemChat
   async createImages({
