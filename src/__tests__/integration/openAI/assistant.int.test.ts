@@ -1,11 +1,10 @@
-import { randomUUID } from 'crypto';
-import { unlinkSync } from 'fs';
 import { Assistant, Chat } from '../../../easyOpenAI';
 import {
   ChatRepository,
   ImageRepository,
   MessageRepository,
 } from '../../../infrastructure';
+
 import {
   createChatCompletionMock,
   createImageMock,
@@ -14,16 +13,6 @@ import { deleteFiles } from '../../utils/util';
 
 describe('Assistant', () => {
   const testBaseDir = './tmpTests';
-  beforeAll(async () => {
-    await deleteFiles(testBaseDir);
-    jest.clearAllMocks();
-  });
-
-  afterAll(async () => {
-    await deleteFiles(testBaseDir);
-    jest.clearAllMocks();
-  });
-
   const chatRepository = new ChatRepository();
   const messageRepository = new MessageRepository();
   const imageRepository = new ImageRepository(testBaseDir);
@@ -43,6 +32,15 @@ describe('Assistant', () => {
   (jest.spyOn(openAIApi, 'createImage') as any).mockImplementation(
     createImageMock,
   );
+  beforeAll(async () => {
+    await deleteFiles(testBaseDir);
+    jest.clearAllMocks();
+  });
+
+  afterAll(async () => {
+    await deleteFiles(testBaseDir);
+    jest.clearAllMocks();
+  });
 
   it('Should be possible to send message to GPT and store the response into the right chat messages', async () => {
     const chat = new Chat({
@@ -94,5 +92,20 @@ describe('Assistant', () => {
       ownerId: 'Almera',
       usage: { prompt_tokens: 60, completion_tokens: 17, total_tokens: 77 },
     });
+  });
+
+  it('Should be possible create an Image', async () => {
+    // Generating an image based on the given description
+    const imgMetadata = (await assistant.createImages({
+      description: 'The master Yoda with white beard in the beach ',
+      numberImages: 1,
+    })) as any;
+
+    expect(imgMetadata.length).toBeGreaterThan(0);
+    const img = await assistant.getImage({
+      id: imgMetadata[0].id,
+    });
+
+    expect(img?.b64Data).toBeTruthy();
   });
 });

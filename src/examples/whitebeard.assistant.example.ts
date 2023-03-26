@@ -11,12 +11,15 @@ import {
   memoryRepository,
 } from '../';
 import { ImageRepository } from '../infrastructure';
+import path from 'path';
 const { ChatRepository, MessageRepository } = memoryRepository;
 
 const main = async () => {
   const chatRepository = new ChatRepository();
   const messageRepository = new MessageRepository();
-  const imageRepository = new ImageRepository('./tmp');
+  const imageRepository = new ImageRepository(
+    path.join(__dirname, '../', '../', '/tmp'),
+  );
 
   const whitebeardAssistant = new Assistant({
     repositories: {
@@ -57,19 +60,31 @@ const main = async () => {
   const resp = await whitebeardAssistant.sendChat(String(chatCreated?.id));
   console.info(resp);
 
-  const img = await whitebeardAssistant.createImages({
-    description: 'The master Yoda in the beach',
-    numberImages: 4,
-  });
-
-  console.info(img);
-
   // All dialog will be stored in the chat
   const chatMessages = await whitebeardAssistant.getMessages({
     chatId,
     ownerId,
   });
   console.info({ chatMessages });
+
+  // Generating an image based on the given description
+  const imgMetadata = await whitebeardAssistant.createImages({
+    description: 'The master Yoda with white beard in the beach ',
+    numberImages: 1,
+  });
+
+  if (imgMetadata) {
+    console.info(imgMetadata);
+
+    // Retrieving the image by id
+    const img = await whitebeardAssistant.getImage({
+      id: imgMetadata[0].id,
+    });
+
+    if (img) {
+      console.info(img.b64Data.slice(0, 50));
+    }
+  }
 };
 
 main();

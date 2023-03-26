@@ -10,11 +10,11 @@ import {
   IChatCompletionMessage,
   IChatCompletionMessageBase,
   IChatRepository,
+  IImageRepository,
   IMessageRepository,
   OpenAI,
 } from '..';
-import { ImageRepository } from '../../../infrastructure';
-import { IImageMetadata } from '../../../infrastructure/image';
+import { IImage, IImageMetadata } from '../../../infrastructure/image';
 
 export enum EHumor {
   'SARCASTIC' = 'sarcastic',
@@ -42,7 +42,7 @@ export interface IAssistant {
   repositories: {
     chatRepository: IChatRepository;
     messageRepository: IMessageRepository;
-    imageRepository: ImageRepository;
+    imageRepository: IImageRepository;
   };
   params?: {
     name?: string;
@@ -64,22 +64,23 @@ export class Assistant {
 
   context: IChatCompletionMessageBase[] = [];
 
-  _chatRepository: IChatRepository;
+  private readonly _chatRepository: IChatRepository;
 
-  _messageRepository: IMessageRepository;
+  private readonly _messageRepository: IMessageRepository;
 
-  _imageRepository: ImageRepository;
+  private readonly _imageRepository: IImageRepository;
 
   constructor({ repositories, params }: IAssistant) {
+    const { chatRepository, imageRepository, messageRepository } = repositories;
     if (params) {
       this.name = params.name || this.name;
       this.humor = params.humor || this.humor;
       this.id = params.id || this.id;
       this.model = params.model || this.model;
     }
-    this._chatRepository = repositories.chatRepository;
-    this._messageRepository = repositories.messageRepository;
-    this._imageRepository = repositories.imageRepository;
+    this._chatRepository = chatRepository;
+    this._messageRepository = messageRepository;
+    this._imageRepository = imageRepository;
     this.setup();
   }
 
@@ -244,7 +245,7 @@ export class Assistant {
       const images = result.data.data;
       const createdAt = result.data.created;
 
-      const imgMetadata: IImageMetadata[] = [];
+      const imgsMetadata: IImageMetadata[] = [];
 
       for (let index = 0; index < images.length; index++) {
         const imageData = images[index];
@@ -255,11 +256,11 @@ export class Assistant {
             id: randomUUID(),
             createdAt,
           };
-          imgMetadata.push({ description, id: img.id, createdAt });
+          imgsMetadata.push({ description, id: img.id, createdAt });
           this._imageRepository.addImage(img);
         }
       }
-      return imgMetadata;
+      return imgsMetadata;
     } catch (error: any) {
       Logger.error(error.message, {
         eventName: 'createImages',
@@ -267,5 +268,10 @@ export class Assistant {
       });
       return;
     }
+  }
+
+  async getImage({ id }: { id: string }): Promise<IImage | void> {
+    const img = await this._imageRepository.get(id);
+    return img;
   }
 }

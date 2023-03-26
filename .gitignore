@@ -3,3 +3,5 @@ node_modules
 dist
 environments/.env
 yarn-error.log
+tmp
+tmpTests

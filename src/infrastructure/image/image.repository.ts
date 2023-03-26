@@ -1,4 +1,4 @@
-import fs from 'fs/promises';
+import { mkdirSync, readFileSync, writeFileSync, unlinkSync } from 'fs';
 import { Logger } from 'traceability';
 import { IImageRepository } from '../../easyOpenAI/core/image/repository/interfaces/image.repository.interface';
 
@@ -15,15 +15,14 @@ export interface IImageMetadata {
 export class ImageRepository implements IImageRepository {
   private readonly _baseDir;
 
-  private images: Omit<IImage, 'b64Data'>[] = [];
+  _imagesMetadata: IImageMetadata[] = [];
 
   constructor(baseDir: string) {
-    this._createDir(baseDir);
     this._baseDir = baseDir;
   }
 
-  private async _createDir(directory: string) {
-    return fs.mkdir(directory, { recursive: true });
+  private _createDir(directory: string) {
+    return mkdirSync(directory, { recursive: true });
   }
 
   public get baseDir() {
@@ -34,23 +33,18 @@ export class ImageRepository implements IImageRepository {
     return `${this.baseDir}/${id}.png`;
   }
 
-  private async _save({
-    id,
-    b64Data,
-  }: {
-    b64Data: string;
-    id: string;
-  }): Promise<string> {
+  private _save({ id, b64Data }: { b64Data: string; id: string }): string {
+    this._createDir(this.baseDir);
+
     const buffer = Buffer.from(b64Data, 'base64');
     const fileName = this._getFilename(id);
-    await fs.writeFile(fileName, buffer);
+    writeFileSync(fileName, buffer);
     return fileName;
   }
 
-  private async _readImgBase64(imgPath: string): Promise<string> {
-    const imgFile = await fs.readFile(imgPath);
+  private _readImgBase64(imgPath: string): string {
+    const imgFile = readFileSync(imgPath);
     const b64Data = Buffer.from(imgFile).toString('base64');
-    console.info({ b64Data, imgPath });
     return b64Data;
   }
 
@@ -61,7 +55,7 @@ export class ImageRepository implements IImageRepository {
     createdAt,
   }: IImage): Promise<IImage | void> {
     try {
-      const imageExist = this.images.find((i) => i.id === id);
+      const imageExist = this._imagesMetadata.find((i) => i.id === id);
       if (imageExist) {
         throw new Error('Image Already exist!');
       }
@@ -73,8 +67,8 @@ export class ImageRepository implements IImageRepository {
         createdAt,
       };
       //The image data is saved in filesystem. We Keep in memory only metadata
-      await this._save({ id, b64Data });
-      this.images.push({ createdAt, description, id });
+      this._save({ id, b64Data });
+      this._imagesMetadata.push({ createdAt, description, id });
 
       return imageStored;
     } catch (error: any) {
@@ -87,7 +81,7 @@ export class ImageRepository implements IImageRepository {
   }
 
   async get(id: string): Promise<IImage | void> {
-    const imageExist = this.images.find((i) => i.id === id);
+    const imageExist = this._imagesMetadata.find((i) => i.id === id);
     if (!imageExist) {
       return;
     }
@@ -101,19 +95,49 @@ export class ImageRepository implements IImageRepository {
   }
 
   async delete(id: string) {
-    const index = this.images.findIndex((i) => i.id === id);
+    const index = this._imagesMetadata.findIndex((i) => i.id === id);
     if (index < 0) {
       return;
     }
-    const imageExist = this.images[index];
+    const imageExist = this._imagesMetadata[index];
     const filename = this._getFilename(id);
-    const imageStored: IImage = {
+    const imgDeleted: IImage = {
       ...imageExist,
-      b64Data: await this._readImgBase64(filename),
+      b64Data: this._readImgBase64(filename),
     };
-    this.images.splice(index);
-    await fs.unlink(filename);
+    this._imagesMetadata.splice(index);
+    unlinkSync(filename);
 
-    return imageStored;
+    return imgDeleted;
+  }
+
+  async getImagesMetadata(
+    ownerId: string,
+    chatId: string,
+    params?: {
+      skip: number;
+      limit: number;
+    },
+  ): Promise<IImageMetadata[]> {
+    let result = this._imagesMetadata;
+    if (params) {
+      if (params.skip < 0) {
+        throw new Error('skip should be >= 0!');
+      }
+      if (params.limit < 0) {
+        throw new Error('limit should be >= 0!');
+      }
+
+      if (params.limit > result.length) {
+        params.limit = result.length;
+      }
+
+      if (params.skip >= result.length) {
+        result = [];
+      } else {
+        result = result.slice(params.skip, params.skip + params.limit);
+      }
+    }
+    return result;
   }
 }
