@@ -1,8 +1,11 @@
 import { mkdirSync, readFileSync, writeFileSync, unlinkSync } from 'fs';
 import { Logger } from 'traceability';
-import { IImageRepository } from '../../easyOpenAI/core/image/repository/interfaces/image.repository.interface';
+import {
+  IImageParams,
+  IImageRepository,
+} from '../../easyOpenAI/core/image/repository/interfaces/image.repository.interface';
 
-export interface IImage extends IImageMetadata {
+export interface IImage extends Omit<IImageMetadata, 'chatId' | 'ownerId'> {
   b64Data: string;
 }
 
@@ -10,6 +13,8 @@ export interface IImageMetadata {
   id: string;
   description: string;
   createdAt: number;
+  ownerId: string;
+  chatId: string;
 }
 
 export class ImageRepository implements IImageRepository {
@@ -48,14 +53,14 @@ export class ImageRepository implements IImageRepository {
     return b64Data;
   }
 
-  async addImage({
-    id,
-    b64Data,
-    description,
-    createdAt,
-  }: IImage): Promise<IImage | void> {
+  async addImage(
+    { chatId, ownerId }: { chatId: string; ownerId: string },
+    { id, b64Data, description, createdAt }: IImage,
+  ): Promise<IImage | void> {
     try {
-      const imageExist = this._imagesMetadata.find((i) => i.id === id);
+      const imageExist = this._imagesMetadata.find(
+        (i) => i.id === id && i.chatId === chatId && i.ownerId === ownerId,
+      );
       if (imageExist) {
         throw new Error('Image Already exist!');
       }
@@ -68,7 +73,13 @@ export class ImageRepository implements IImageRepository {
       };
       //The image data is saved in filesystem. We Keep in memory only metadata
       this._save({ id, b64Data });
-      this._imagesMetadata.push({ createdAt, description, id });
+      this._imagesMetadata.push({
+        createdAt,
+        description,
+        id,
+        chatId,
+        ownerId,
+      });
 
       return imageStored;
     } catch (error: any) {
@@ -80,12 +91,18 @@ export class ImageRepository implements IImageRepository {
     }
   }
 
-  async get(id: string): Promise<IImage | void> {
-    const imageExist = this._imagesMetadata.find((i) => i.id === id);
+  async get({
+    imageId,
+    ownerId,
+    chatId,
+  }: IImageParams): Promise<IImage | void> {
+    const imageExist = this._imagesMetadata.find(
+      (i) => i.id === imageId && i.chatId === chatId && i.ownerId === ownerId,
+    );
     if (!imageExist) {
       return;
     }
-    const filename = this._getFilename(id);
+    const filename = this._getFilename(imageId);
     const imageStored: IImage = {
       ...imageExist,
       b64Data: await this._readImgBase64(filename),
@@ -94,13 +111,15 @@ export class ImageRepository implements IImageRepository {
     return imageStored;
   }
 
-  async delete(id: string) {
-    const index = this._imagesMetadata.findIndex((i) => i.id === id);
+  async delete({ imageId, ownerId, chatId }: IImageParams) {
+    const index = this._imagesMetadata.findIndex(
+      (i) => i.id === imageId && i.chatId === chatId && i.ownerId === ownerId,
+    );
     if (index < 0) {
       return;
     }
     const imageExist = this._imagesMetadata[index];
-    const filename = this._getFilename(id);
+    const filename = this._getFilename(imageId);
     const imgDeleted: IImage = {
       ...imageExist,
       b64Data: this._readImgBase64(filename),

@@ -10,6 +10,7 @@ import {
   IChatCompletionMessage,
   IChatCompletionMessageBase,
   IChatRepository,
+  IImageParams,
   IImageRepository,
   IMessageRepository,
   OpenAI,
@@ -227,10 +228,14 @@ export class Assistant {
     numberImages = 1,
     size = '256x256',
     description,
+    ownerId,
+    chatId,
   }: {
     numberImages?: number;
     size?: CreateImageRequestSizeEnum;
     description: string;
+    ownerId: string;
+    chatId: string;
   }): Promise<IImageMetadata[] | void> {
     const response_format: CreateImageRequestResponseFormatEnum = 'b64_json';
 
@@ -255,9 +260,17 @@ export class Assistant {
             b64Data: imageData.b64_json,
             id: randomUUID(),
             createdAt,
+            ownerId,
+            chatId,
           };
-          imgsMetadata.push({ description, id: img.id, createdAt });
-          this._imageRepository.addImage(img);
+          imgsMetadata.push({
+            description,
+            id: img.id,
+            createdAt,
+            ownerId,
+            chatId,
+          });
+          this._imageRepository.addImage({ chatId, ownerId }, img);
         }
       }
       return imgsMetadata;
@@ -270,8 +283,12 @@ export class Assistant {
     }
   }
 
-  async getImage({ id }: { id: string }): Promise<IImage | void> {
-    const img = await this._imageRepository.get(id);
+  async getImage({
+    imageId,
+    ownerId,
+    chatId,
+  }: IImageParams): Promise<IImage | void> {
+    const img = await this._imageRepository.get({ imageId, ownerId, chatId });
     return img;
   }
 }

@@ -71,6 +71,8 @@ const main = async () => {
   const imgMetadata = await whitebeardAssistant.createImages({
     description: 'The master Yoda with white beard in the beach ',
     numberImages: 1,
+    chatId,
+    ownerId,
   });
 
   if (imgMetadata) {
@@ -78,7 +80,9 @@ const main = async () => {
 
     // Retrieving the image by id
     const img = await whitebeardAssistant.getImage({
-      id: imgMetadata[0].id,
+      imageId: imgMetadata[0].id,
+      chatId,
+      ownerId,
     });
 
     if (img) {

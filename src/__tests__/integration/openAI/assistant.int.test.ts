@@ -5,6 +5,7 @@ import {
   ImageRepository,
   MessageRepository,
 } from '../../../infrastructure';
+import { IImageMetadata } from '../../../infrastructure/image';
 
 import {
   createChatCompletionMock,
@@ -101,11 +102,15 @@ describe('Assistant', () => {
     const imgMetadata = (await assistant.createImages({
       description: 'The master Yoda with white beard in the beach ',
       numberImages: 1,
-    })) as any;
+      chatId: 'chat001',
+      ownerId: 'Whitebeard',
+    })) as IImageMetadata[];
 
     expect(imgMetadata.length).toBeGreaterThan(0);
     const img = await assistant.getImage({
-      id: imgMetadata[0].id,
+      imageId: imgMetadata[0].id,
+      ownerId: imgMetadata[0].ownerId,
+      chatId: imgMetadata[0].chatId,
     });
 
     expect(img?.b64Data).toBeTruthy();
